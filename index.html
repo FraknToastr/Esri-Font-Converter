@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #1a202c;
             min-height: 100vh;
             padding: 20px;
         }
@@ -21,40 +21,92 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
-            background: white;
+            background: #2d3748;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             padding: 40px;
         }
 
         h1 {
-            color: #2d3748;
-            margin-bottom: 10px;
+            color: #e2e8f0;
+            margin-bottom: 30px;
             font-size: 2em;
         }
 
-        .subtitle {
-            color: #718096;
-            margin-bottom: 30px;
-            font-size: 0.95em;
-        }
-
         .loading-banner {
-            background: #edf2f7;
-            padding: 15px;
+            background: #4a5568;
+            padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
-            color: #4a5568;
+            color: #e2e8f0;
         }
 
         .loading-banner.success {
-            background: #c6f6d5;
-            color: #22543d;
+            background: #2f855a;
+            color: white;
+        }
+
+        .load-font-btn {
+            padding: 12px 24px;
+            font-size: 1em;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .load-font-btn:hover {
+            background: #38a169;
+        }
+
+        .font-instructions {
+            color: #cbd5e0;
+            font-size: 0.9em;
+            margin-top: 12px;
+        }
+
+        .font-path-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .font-path {
+            background: #1a202c;
+            color: #48bb78;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+
+        .copy-path-btn {
+            background: #4a5568;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .copy-path-btn:hover {
+            background: #667eea;
+        }
+
+        .copy-path-btn.copied {
+            background: #48bb78;
         }
 
         .input-section {
-            background: #f7fafc;
+            background: #1a202c;
             padding: 25px;
             border-radius: 12px;
             margin-bottom: 30px;
@@ -68,7 +120,7 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #2d3748;
+            color: #e2e8f0;
             font-weight: 600;
             font-size: 0.9em;
         }
@@ -76,7 +128,9 @@
         input, select {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #4a5568;
+            background: #2d3748;
+            color: #e2e8f0;
             border-radius: 8px;
             font-size: 1em;
             transition: border-color 0.3s;
@@ -85,6 +139,33 @@
         input:focus, select:focus {
             outline: none;
             border-color: #667eea;
+        }
+
+        input::placeholder {
+            color: #718096;
+        }
+
+        #fontSearch {
+            padding-right: 90px;
+        }
+
+        .clear-font-btn {
+            position: absolute;
+            right: 12px;
+            top: 38px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            z-index: 100;
+        }
+
+        .clear-font-btn:hover {
+            background: #5568d3;
         }
 
         .input-row {
@@ -102,8 +183,9 @@
         .toggle-btn {
             flex: 1;
             padding: 10px 20px;
-            border: 2px solid #e2e8f0;
-            background: white;
+            border: 2px solid #4a5568;
+            background: #2d3748;
+            color: #e2e8f0;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
@@ -155,7 +237,7 @@
         }
 
         .btn-download:disabled {
-            background: #cbd5e0;
+            background: #4a5568;
             cursor: not-allowed;
             transform: none;
         }
@@ -167,150 +249,54 @@
         .preview-title {
             font-size: 1.1em;
             font-weight: 600;
-            color: #2d3748;
+            color: #e2e8f0;
             margin-bottom: 15px;
         }
 
         .preview-box {
-            background: #f7fafc;
-            border: 2px dashed #cbd5e0;
+            background: #1a202c;
+            border: 2px dashed #4a5568;
             border-radius: 12px;
-            min-height: 200px;
+            min-height: 280px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 30px;
+            padding: 40px;
         }
 
         .preview-content {
             text-align: center;
+            width: 100%;
         }
 
         .symbol-preview {
-            font-size: 120px;
+            font-size: 140px;
             line-height: 1;
-            margin-bottom: 15px;
+            margin-bottom: 40px;
+            color: #e2e8f0;
         }
 
         .symbol-info {
-            color: #718096;
-            font-size: 0.9em;
+            color: #a0aec0;
+            font-size: 0.95em;
+            line-height: 1.8;
         }
 
         .empty-state {
-            color: #a0aec0;
+            color: #718096;
             font-size: 1.1em;
-        }
-
-        .info-box {
-            background: #edf2f7;
-            border-left: 4px solid #4299e1;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-
-        .info-box p {
-            color: #2d3748;
-            font-size: 0.9em;
-            line-height: 1.6;
-        }
-
-        .error {
-            background: #fed7d7;
-            border-left-color: #f56565;
-        }
-
-        .error p {
-            color: #742a2a;
-        }
-
-        .debug-panel {
-            background: #2d3748;
-            color: #e2e8f0;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .debug-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #4a5568;
-        }
-
-        .debug-title {
-            font-weight: 600;
-            color: #48bb78;
-        }
-
-        .debug-toggle {
-            background: #4a5568;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-
-        .debug-toggle:hover {
-            background: #718096;
-        }
-
-        .debug-log {
-            background: #1a202c;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            border-left: 3px solid #4299e1;
-        }
-
-        .debug-log.success {
-            border-left-color: #48bb78;
-        }
-
-        .debug-log.error {
-            border-left-color: #f56565;
-        }
-
-        .debug-log.warning {
-            border-left-color: #ed8936;
-        }
-
-        .debug-timestamp {
-            color: #a0aec0;
-            font-size: 0.85em;
-            margin-right: 10px;
-        }
-
-        .debug-message {
-            color: #e2e8f0;
-        }
-
-        .debug-data {
-            color: #90cdf4;
-            margin-left: 20px;
-            margin-top: 5px;
         }
 
         .font-dropdown {
             position: absolute;
-            background: white;
-            border: 2px solid #e2e8f0;
+            background: #1a202c;
+            border: 2px solid #4a5568;
             border-radius: 8px;
             max-height: 300px;
             overflow-y: auto;
             width: 100%;
             margin-top: 5px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             z-index: 1000;
         }
 
@@ -318,56 +304,19 @@
             padding: 12px 15px;
             cursor: pointer;
             transition: background 0.2s;
-            border-bottom: 1px solid #f7fafc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-bottom: 1px solid #2d3748;
+            color: #e2e8f0;
         }
 
         .font-option:hover {
-            background: #f7fafc;
-        }
-
-        .font-option:last-child {
-            border-bottom: none;
-        }
-
-        .font-option.selected {
-            background: #edf2f7;
-            font-weight: 600;
-        }
-
-        .font-badge {
-            background: #48bb78;
-            color: white;
-            font-size: 0.7em;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-weight: 600;
+            background: #2d3748;
         }
 
         .no-results {
             padding: 15px;
             text-align: center;
-            color: #a0aec0;
+            color: #718096;
             font-style: italic;
-        }
-
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-            display: inline-block;
-            margin-right: 10px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         @media (max-width: 768px) {
@@ -383,26 +332,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>🎨 ESRI Font Symbol Exporter</h1>
-        <p class="subtitle">Export font symbols as SVG or PNG files</p>
+        <h1>ArcGIS Font Symbol Exporter</h1>
 
         <div id="loadingBanner" class="loading-banner">
-            <div class="spinner"></div>
-            Scanning for installed ESRI fonts...
-            <div style="margin-top: 10px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                <button class="debug-toggle" onclick="loadArcGISFonts()" 
-                        style="padding: 8px 16px; font-size: 1em; background: #48bb78; color: white;"
-                        title="Opens file picker. Navigate to C:\Program Files\ArcGIS\Pro\Resources\Fonts, press Ctrl+A to select all fonts, then click Open">
-                    📂 Load CoA ArcGIS Fonts ℹ️
-                </button>
-            </div>
+            <button class="load-font-btn" onclick="loadArcGISFonts()">Load CoA ArcGIS Fonts</button>
             <input type="file" id="fontFileInput" accept=".ttf,.otf" multiple style="display: none;">
-            <div style="margin-top: 10px; font-size: 0.85em; color: #4a5568; max-width: 600px; margin-left: auto; margin-right: auto;">
-                <strong>💡 Quick Start:</strong> Click "Load ArcGIS Fonts" button, then navigate to:<br>
-                <code style="background: #2d3748; color: #48bb78; padding: 4px 8px; border-radius: 4px; display: inline-block; margin-top: 5px;">
-                    C:\Program Files\ArcGIS\Pro\Resources\Fonts
-                </code><br>
-                Select all font files (Ctrl+A) and click Open.
+            <div class="font-instructions">
+                Click button above, then navigate to:
+            </div>
+            <div class="font-path-container">
+                <div class="font-path">C:\Program Files\ArcGIS\Pro\Resources\Fonts</div>
+                <button class="copy-path-btn" onclick="copyFontPath()">Copy</button>
+            </div>
+            <div class="font-instructions" style="margin-top: 8px;">
+                Select all font files (Ctrl+A) and click Open
             </div>
         </div>
 
@@ -410,6 +353,7 @@
             <div class="input-group">
                 <label for="fontSearch">Select ESRI Font <span id="fontCount"></span></label>
                 <input type="text" id="fontSearch" placeholder="Search fonts..." autocomplete="off">
+                <button class="clear-font-btn" id="clearFontBtn" onclick="clearFontSelection()" style="display: none;">Clear</button>
                 <div id="fontDropdown" class="font-dropdown" style="display: none;"></div>
                 <input type="hidden" id="fontSelect">
             </div>
@@ -456,294 +400,51 @@
                 <div class="empty-state">Enter a character code and click "Generate Preview"</div>
             </div>
         </div>
-
-        <div class="info-box">
-            <p><strong>How to use:</strong> The tool scans your system for installed ESRI fonts. Enter a character using any method (key, decimal, or hex code). Select your font, choose export format, and generate a preview. Click download to save the symbol.</p>
-        </div>
-
-        <div class="debug-panel">
-            <div class="debug-header">
-                <span class="debug-title">🐛 Debug Console</span>
-                <button class="debug-toggle" onclick="clearDebugLog()">Clear Log</button>
-            </div>
-            <div id="debugLog"></div>
-        </div>
     </div>
 
     <script>
-        // Known ESRI Font List (fallback)
         const knownEsriFonts = [
             'ESRI Accident', 'ESRI ADS-1', 'ESRI ADS-2', 'ESRI ADS-3',
             'ESRI AMFM Electric', 'ESRI AMFM Gas', 'ESRI AMFM Sewer', 'ESRI AMFM Water',
             'ESRI ArcPad', 'ESRI Arrowhead', 'ESRI Business', 'ESRI Cartography',
             'ESRI Caves 1', 'ESRI Caves 2', 'ESRI Caves 3', 'ESRI Climate & Precipitation',
             'ESRI Commodities', 'ESRI Conservation', 'ESRI Crime Analysis',
-            'ESRI Default Marker', 'ESRI Dimensioning', 'ESRI ELC GeoSym1',
-            'ESRI ELC GeoSym2', 'ESRI ELC GeoSym3', 'ESRI ELC INFL1', 'ESRI ELC INFL2',
-            'ESRI ELC INFL3', 'ESRI ELC Operations', 'ESRI Electric', 'ESRI Electrical',
-            'ESRI Emergency Management', 'ESRI Environmental & Icons',
-            'ESRI Fire Incident NFPA', 'ESRI Flags', 'ESRI Geometric Symbols',
-            'ESRI Geology', 'ESRI Geology AGSO 1', 'ESRI Geology AGSO 2',
-            'ESRI Geology AGSO 3', 'ESRI Geology USGS 95-525',
-            'ESRI Geology USGS 95-525 Annex', 'ESRI Hazmat Incidents',
-            'ESRI Hazmat Infrastructure', 'ESRI Hazmat Response',
-            'ESRI Hazmat Transportation', 'ESRI Hydrants', 'ESRI IGL Font01',
-            'ESRI IGL Font02', 'ESRI IGL Font03', 'ESRI IGL Font04', 'ESRI IGL Font05',
-            'ESRI IGL Font06', 'ESRI IGL Font07', 'ESRI IGL Font08', 'ESRI IGL Font09',
-            'ESRI IGL Font10', 'ESRI IGL Font11', 'ESRI IGL Font12', 'ESRI IGL Font13',
-            'ESRI IGL Font14', 'ESRI IGL Font15', 'ESRI IGL Font16', 'ESRI IGL Font17',
-            'ESRI IGL Font18', 'ESRI IGL Font19', 'ESRI IGL Font20', 'ESRI IGL Font21',
-            'ESRI IGL Font22', 'ESRI IGL Font23', 'ESRI IGL Font24', 'ESRI IGL Font25',
-            'ESRI Literacy', 'ESRI MilMod 01', 'ESRI MilMod 02', 'ESRI Mines',
-            'ESRI North', 'ESRI Oil, Gas, & Water', 'ESRI Ordnance Survey',
+            'ESRI Default Marker', 'ESRI Dimensioning', 'ESRI Environmental & Icons',
+            'ESRI Flags', 'ESRI Geometric Symbols', 'ESRI Geology',
+            'ESRI Hydrants', 'ESRI North', 'ESRI Oil, Gas, & Water',
             'ESRI Pipeline US 1', 'ESRI Plates', 'ESRI Public1', 'ESRI Residential',
-            'ESRI SDS 1.95 1', 'ESRI SDS 1.95 2', 'ESRI SDS 2.00 1', 'ESRI SDS 2.00 2',
-            'ESRI Shields & Highway Signs', 'ESRI Surveying COGO', 'ESRI Target',
-            'ESRI Telecom', 'ESRI Transportation & Civic', 'ESRI Triangles',
-            'ESRI US 1950 FIPS', 'ESRI US 1970 FIPS', 'ESRI US 1990 FIPS',
-            'ESRI US Caves 1', 'ESRI US Caves 2', 'ESRI US Forestry 1',
-            'ESRI US Forestry 2', 'ESRI US MUTCD 1', 'ESRI US MUTCD 2',
-            'ESRI US MUTCD 3', 'ESRI Valves 1', 'ESRI Water', 'ESRI Weather',
-            'ESRI Weatherstations E-OBS'
+            'ESRI Shields & Highway Signs', 'ESRI Telecom', 'ESRI Transportation & Civic',
+            'ESRI Triangles', 'ESRI US MUTCD 1', 'ESRI US MUTCD 2', 'ESRI US MUTCD 3',
+            'ESRI Valves 1', 'ESRI Water', 'ESRI Weather'
         ];
 
         let installedFonts = [];
-        let loadedFontFiles = {}; // Store loaded font file data
+        let loadedFontFiles = {};
         let currentFormat = 'svg';
         let currentCharCode = null;
         let currentFont = null;
 
-        // Debug logging system
-        function debugLog(message, type = 'info', data = null) {
-            const timestamp = new Date().toLocaleTimeString();
-            const logEntry = document.createElement('div');
-            logEntry.className = `debug-log ${type}`;
-            
-            let html = `<span class="debug-timestamp">[${timestamp}]</span><span class="debug-message">${message}</span>`;
-            
-            if (data) {
-                html += `<div class="debug-data">${JSON.stringify(data, null, 2)}</div>`;
-            }
-            
-            logEntry.innerHTML = html;
-            
-            const debugLogContainer = document.getElementById('debugLog');
-            debugLogContainer.insertBefore(logEntry, debugLogContainer.firstChild);
-            
-            // Also log to console
-            console.log(`[${type.toUpperCase()}] ${message}`, data || '');
-        }
-
-        function clearDebugLog() {
-            document.getElementById('debugLog').innerHTML = '';
-            debugLog('Debug log cleared', 'info');
-        }
-
-        // Detect installed fonts
-        // Detect installed fonts
-        async function requestFontAccess() {
-            debugLog('User requested font access...', 'info');
-            
-            if (!('queryLocalFonts' in window)) {
-                debugLog('Font Access API not available in this browser', 'warning');
-                alert('Font Access API not available. Using canvas detection fallback.');
-                await detectInstalledFonts();
-                return;
-            }
-
-            try {
-                debugLog('Requesting font access permission...', 'info');
-                const availableFonts = await window.queryLocalFonts();
-                debugLog(`Font Access API returned ${availableFonts.length} total fonts`, 'success');
-                
-                const fontNames = [...new Set(availableFonts.map(f => f.family))];
-                debugLog(`Found ${fontNames.length} unique font families`, 'info');
-                
-                // Log ALL fonts for debugging
-                debugLog('Sample of all fonts found:', 'info', fontNames.slice(0, 20));
-                
-                // Try different search patterns
-                const esriPatterns = ['esri', 'ESRI', 'Esri'];
-                let foundFonts = [];
-                
-                for (const pattern of esriPatterns) {
-                    const matches = fontNames.filter(name => name.includes(pattern));
-                    if (matches.length > 0) {
-                        foundFonts = [...new Set([...foundFonts, ...matches])];
-                        debugLog(`Found ${matches.length} fonts matching "${pattern}"`, 'success', matches);
-                    }
-                }
-                
-                if (foundFonts.length > 0) {
-                    installedFonts = foundFonts.sort();
-                    debugLog(`Total ESRI fonts detected: ${installedFonts.length}`, 'success', installedFonts);
-                    showSuccess(installedFonts.length);
-                } else {
-                    debugLog('No ESRI fonts found in system fonts', 'warning');
-                    debugLog('Falling back to canvas detection...', 'info');
-                    installedFonts = await detectFontsCanvas();
-                    
-                    if (installedFonts.length > 0) {
-                        showSuccess(installedFonts.length);
-                    } else {
-                        const loadingBanner = document.getElementById('loadingBanner');
-                        loadingBanner.innerHTML = '⚠️ No ESRI fonts detected. Using fallback list. You can still use the fonts if they\'re installed.';
-                        loadingBanner.classList.add('error');
-                        installedFonts = knownEsriFonts;
-                        debugLog('Using fallback list of all known ESRI fonts', 'warning');
-                    }
-                }
-            } catch (error) {
-                debugLog(`Font Access API error: ${error.message}`, 'error');
-                alert('Font access denied or error occurred. Using canvas detection.');
-                installedFonts = await detectFontsCanvas();
-                
-                if (installedFonts.length === 0) {
-                    installedFonts = knownEsriFonts;
-                }
-                showSuccess(installedFonts.length);
-            }
-        }
-
-        async function detectInstalledFonts() {
-            const loadingBanner = document.getElementById('loadingBanner');
-            debugLog('Starting font detection...', 'info');
-            
-            try {
-                // Try using Font Access API (Chrome/Edge)
-                if ('queryLocalFonts' in window) {
-                    debugLog('Font Access API available - using primary detection method', 'success');
-                    
-                    try {
-                        const availableFonts = await window.queryLocalFonts();
-                        debugLog(`Font Access API returned ${availableFonts.length} total fonts`, 'info');
-                        
-                        const fontNames = [...new Set(availableFonts.map(f => f.family))];
-                        debugLog(`Found ${fontNames.length} unique font families`, 'info');
-                        
-                        installedFonts = fontNames.filter(name => 
-                            name.toLowerCase().includes('esri')
-                        ).sort();
-                        
-                        debugLog(`Filtered to ${installedFonts.length} ESRI fonts`, 'success', installedFonts);
-                        
-                        if (installedFonts.length > 0) {
-                            showSuccess(installedFonts.length);
-                            return;
-                        } else {
-                            debugLog('No ESRI fonts found with Font Access API, trying fallback', 'warning');
-                        }
-                    } catch (apiError) {
-                        debugLog('Font Access API error: ' + apiError.message, 'error');
-                    }
-                } else {
-                    debugLog('Font Access API not available in this browser', 'warning');
-                }
-            } catch (e) {
-                debugLog('Error checking Font Access API: ' + e.message, 'error');
-            }
-
-            // Fallback: Canvas-based font detection
-            debugLog('Using canvas-based font detection (fallback method)', 'info');
-            installedFonts = await detectFontsCanvas();
-            
-            if (installedFonts.length > 0) {
-                debugLog(`Canvas detection found ${installedFonts.length} ESRI fonts`, 'success', installedFonts);
-                showSuccess(installedFonts.length);
-            } else {
-                debugLog('No ESRI fonts detected by any method', 'error');
-                loadingBanner.innerHTML = '⚠️ No ESRI fonts detected. Using fallback list.';
-                loadingBanner.classList.add('error');
-                installedFonts = knownEsriFonts;
-                debugLog(`Using fallback list of ${knownEsriFonts.length} known ESRI fonts`, 'warning');
-            }
-        }
-
-        async function detectFontsCanvas() {
-            debugLog('Starting canvas-based font detection...', 'info');
-            const detected = [];
-            const canvas = document.createElement('canvas');
-            canvas.width = 500;
-            canvas.height = 200;
-            const ctx = canvas.getContext('2d');
-            
-            // Multiple test strings for better detection
-            const testStrings = [
-                'mmmmmmmmmmlli',
-                'ABCDEFGHIJKLM',
-                '0123456789',
-                '@#$%&*'
-            ];
-            const testSize = '72px';
-            const baselines = ['serif', 'sans-serif', 'monospace'];
-            
-            // Get baseline measurements
-            const baselineMeasurements = [];
-            for (const baseline of baselines) {
-                for (const testString of testStrings) {
-                    ctx.font = testSize + ' ' + baseline;
-                    const width = ctx.measureText(testString).width;
-                    baselineMeasurements.push({ baseline, testString, width });
-                    debugLog(`Baseline: ${baseline}, String: "${testString}", Width: ${width.toFixed(2)}px`, 'info');
-                }
-            }
-            
-            let testedCount = 0;
-            for (const font of knownEsriFonts) {
-                let fontDetected = false;
-                
-                // Test against multiple baselines and strings
-                for (const test of baselineMeasurements) {
-                    ctx.font = testSize + ' "' + font + '", ' + test.baseline;
-                    const newWidth = ctx.measureText(test.testString).width;
-                    const diff = Math.abs(newWidth - test.width);
-                    
-                    // Lower threshold to 0.5px for better detection
-                    if (diff > 0.5) {
-                        if (!fontDetected) {
-                            detected.push(font);
-                            fontDetected = true;
-                            debugLog(`✓ Font detected: ${font} (width diff: ${diff.toFixed(2)}px, baseline: ${test.baseline}, string: "${test.testString}")`, 'success');
-                        }
-                        break;
-                    }
-                }
-                
-                if (!fontDetected) {
-                    debugLog(`✗ Font NOT detected: ${font}`, 'warning');
-                }
-                
-                testedCount++;
-                if (testedCount % 10 === 0) {
-                    debugLog(`Progress: ${testedCount}/${knownEsriFonts.length} fonts tested, ${detected.length} found so far`, 'info');
-                }
-            }
-            
-            debugLog(`Canvas detection complete: ${detected.length}/${knownEsriFonts.length} fonts found`, detected.length > 0 ? 'success' : 'error');
-            
-            if (detected.length === 0) {
-                debugLog('DIAGNOSIS: No fonts detected. Possible reasons:', 'warning');
-                debugLog('1. ESRI fonts may not be installed on this system', 'warning');
-                debugLog('2. Fonts may be installed with different names', 'warning');
-                debugLog('3. Browser font rendering may not differentiate fonts in canvas', 'warning');
-                debugLog('Recommendation: Check Windows Fonts folder (C:\\Windows\\Fonts) for ESRI fonts', 'warning');
-            }
-            
-            return detected.sort();
-        }
-
-        function showSuccess(count) {
-            const loadingBanner = document.getElementById('loadingBanner');
-            loadingBanner.innerHTML = `✓ Found ${count} installed ESRI font${count !== 1 ? 's' : ''}`;
-            loadingBanner.classList.add('success');
-            document.getElementById('fontCount').textContent = `(${count} available)`;
-            debugLog(`Successfully loaded ${count} ESRI fonts`, 'success');
-        }
-
-        // Font search and dropdown functionality
         const fontSearch = document.getElementById('fontSearch');
         const fontDropdown = document.getElementById('fontDropdown');
         const fontSelect = document.getElementById('fontSelect');
+        const clearFontBtn = document.getElementById('clearFontBtn');
+
+        function copyFontPath() {
+            const path = 'C:\\Program Files\\ArcGIS\\Pro\\Resources\\Fonts';
+            navigator.clipboard.writeText(path).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                alert('Could not copy to clipboard');
+            });
+        }
 
         function populateFontDropdown(filterText = '') {
             const filtered = installedFonts.filter(font => 
@@ -754,13 +455,9 @@
                 fontDropdown.innerHTML = '<div class="no-results">No fonts found</div>';
             } else {
                 fontDropdown.innerHTML = filtered.map(font => 
-                    `<div class="font-option" data-font="${font}">
-                        <span>${font}</span>
-                        <span class="font-badge">INSTALLED</span>
-                    </div>`
+                    `<div class="font-option" data-font="${font}">${font}</div>`
                 ).join('');
 
-                // Add click handlers
                 document.querySelectorAll('.font-option').forEach(option => {
                     option.addEventListener('click', function() {
                         selectFont(this.dataset.font);
@@ -774,7 +471,17 @@
             fontSelect.value = fontName;
             currentFont = fontName;
             fontDropdown.style.display = 'none';
-            debugLog(`Font selected: ${fontName}`, 'info');
+            clearFontBtn.style.display = 'block';
+        }
+
+        function clearFontSelection() {
+            fontSearch.value = '';
+            fontSelect.value = '';
+            currentFont = null;
+            clearFontBtn.style.display = 'none';
+            populateFontDropdown('');
+            fontDropdown.style.display = 'block';
+            fontSearch.focus();
         }
 
         fontSearch.addEventListener('focus', function() {
@@ -785,43 +492,36 @@
         fontSearch.addEventListener('input', function() {
             populateFontDropdown(this.value);
             fontDropdown.style.display = 'block';
+            if (this.value && fontSelect.value) {
+                clearFontBtn.style.display = 'block';
+            }
         });
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.input-group')) {
                 fontDropdown.style.display = 'none';
             }
         });
 
-        // Toggle format buttons
         document.querySelectorAll('.toggle-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 currentFormat = this.dataset.format;
-                
                 document.getElementById('pngOptions').style.display = 
                     currentFormat === 'png' ? 'block' : 'none';
             });
         });
 
-        // Input synchronization
         const keyInput = document.getElementById('keyInput');
         const decimalInput = document.getElementById('decimalInput');
         const hexInput = document.getElementById('hexInput');
 
         keyInput.addEventListener('input', function() {
             if (this.value) {
-                let code;
-                if (this.value.toLowerCase() === 'space') {
-                    code = 32;
-                } else {
-                    code = this.value.charCodeAt(0);
-                }
+                let code = this.value.toLowerCase() === 'space' ? 32 : this.value.charCodeAt(0);
                 decimalInput.value = code;
                 hexInput.value = code.toString(16).toUpperCase();
-                debugLog(`Key input: "${this.value}" → Code: ${code}`, 'info');
             }
         });
 
@@ -830,14 +530,9 @@
                 const code = parseInt(this.value);
                 if (code >= 0 && code <= 65535) {
                     hexInput.value = code.toString(16).toUpperCase();
-                    if (code === 32) {
-                        keyInput.value = 'Space';
-                    } else if (code >= 33 && code <= 126) {
-                        keyInput.value = String.fromCharCode(code);
-                    } else {
-                        keyInput.value = `U+${code.toString(16).toUpperCase()}`;
-                    }
-                    debugLog(`Decimal input: ${code} → Hex: ${hexInput.value}`, 'info');
+                    keyInput.value = code === 32 ? 'Space' : 
+                                   (code >= 33 && code <= 126) ? String.fromCharCode(code) : 
+                                   `U+${code.toString(16).toUpperCase()}`;
                 }
             }
         });
@@ -847,14 +542,9 @@
                 const code = parseInt(this.value, 16);
                 if (!isNaN(code)) {
                     decimalInput.value = code;
-                    if (code === 32) {
-                        keyInput.value = 'Space';
-                    } else if (code >= 33 && code <= 126) {
-                        keyInput.value = String.fromCharCode(code);
-                    } else {
-                        keyInput.value = `U+${code.toString(16).toUpperCase()}`;
-                    }
-                    debugLog(`Hex input: ${this.value} → Decimal: ${code}`, 'info');
+                    keyInput.value = code === 32 ? 'Space' : 
+                                   (code >= 33 && code <= 126) ? String.fromCharCode(code) : 
+                                   `U+${code.toString(16).toUpperCase()}`;
                 }
             }
         });
@@ -863,21 +553,13 @@
             const selectedFont = fontSelect.value;
             const decimalCode = parseInt(decimalInput.value);
             
-            debugLog('Generate preview requested', 'info', {
-                font: selectedFont,
-                code: decimalCode,
-                format: currentFormat
-            });
-            
             if (!selectedFont) {
-                showError('Please select a font');
-                debugLog('Preview generation failed: No font selected', 'error');
+                alert('Please select a font');
                 return;
             }
             
             if (!decimalCode || isNaN(decimalCode)) {
-                showError('Please enter a valid character code');
-                debugLog('Preview generation failed: Invalid character code', 'error');
+                alert('Please enter a valid character code');
                 return;
             }
 
@@ -891,38 +573,24 @@
                 <div class="preview-content">
                     <div class="symbol-preview" style="font-family: '${currentFont}', sans-serif;">${character}</div>
                     <div class="symbol-info">
-                        <strong>Character:</strong> ${keyInput.value}<br>
-                        <strong>Decimal:</strong> ${decimalCode} | <strong>Hex:</strong> 0x${decimalCode.toString(16).toUpperCase()}<br>
+                        <strong>Character:</strong> ${keyInput.value}<br><br>
+                        <strong>Decimal:</strong> ${decimalCode} | <strong>Hex:</strong> 0x${decimalCode.toString(16).toUpperCase()}<br><br>
                         <strong>Font:</strong> ${currentFont}
                     </div>
                 </div>
             `;
             
             document.getElementById('downloadBtn').disabled = false;
-            debugLog(`Preview generated successfully for character ${decimalCode}`, 'success');
-        }
-
-        function showError(message) {
-            const previewBox = document.getElementById('previewBox');
-            previewBox.innerHTML = `<div class="error-message" style="color: #f56565;">${message}</div>`;
-            document.getElementById('downloadBtn').disabled = true;
         }
 
         function downloadSymbol() {
             if (!currentCharCode || !currentFont) {
                 alert('Please generate a preview first');
-                debugLog('Download failed: No preview generated', 'error');
                 return;
             }
 
             const character = String.fromCharCode(currentCharCode);
             const filename = `${currentFont.replace(/\s+/g, '_')}_${currentCharCode}`;
-
-            debugLog(`Starting download: ${filename}.${currentFormat}`, 'info', {
-                font: currentFont,
-                code: currentCharCode,
-                format: currentFormat
-            });
 
             if (currentFormat === 'svg') {
                 downloadSVG(character, filename);
@@ -933,39 +601,68 @@
 
         function downloadSVG(character, filename) {
             const size = 512;
+            
+            if (!loadedFontFiles[currentFont]) {
+                alert('Error: Font data not found. Please reload the font.');
+                return;
+            }
+            
+            const fontData = loadedFontFiles[currentFont].data;
+            const uint8Array = new Uint8Array(fontData);
+            let binaryString = '';
+            for (let i = 0; i < uint8Array.length; i++) {
+                binaryString += String.fromCharCode(uint8Array[i]);
+            }
+            const base64Font = btoa(binaryString);
+            
             const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
-    <rect width="${size}" height="${size}" fill="transparent"/>
-    <text x="50%" y="50%" 
-          font-family="${currentFont}" 
-          font-size="${size * 0.8}" 
-          text-anchor="middle" 
-          dominant-baseline="central"
-          fill="black">${character}</text>
+  <defs>
+    <style type="text/css">
+      @font-face {
+        font-family: "EmbeddedESRI";
+        src: url("data:font/truetype;base64,${base64Font}") format("truetype");
+      }
+    </style>
+  </defs>
+  <rect width="${size}" height="${size}" fill="transparent"/>
+  <text x="50%" y="55%" 
+        font-family="EmbeddedESRI" 
+        font-size="${size * 0.75}" 
+        text-anchor="middle" 
+        dominant-baseline="middle"
+        fill="black">${character}</text>
 </svg>`;
 
             const blob = new Blob([svg], { type: 'image/svg+xml' });
             downloadBlob(blob, filename + '.svg');
-            debugLog(`SVG download initiated: ${filename}.svg (${blob.size} bytes)`, 'success');
         }
 
-        function downloadPNG(character, filename) {
+        async function downloadPNG(character, filename) {
             const size = parseInt(document.getElementById('sizeInput').value) || 512;
+            
+            if (!loadedFontFiles[currentFont]) {
+                alert('Error: Font data not found. Please reload the font.');
+                return;
+            }
+            
+            await document.fonts.ready;
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
             const canvas = document.createElement('canvas');
             canvas.width = size;
             canvas.height = size;
             const ctx = canvas.getContext('2d');
 
             ctx.clearRect(0, 0, size, size);
-            ctx.font = `${size * 0.8}px "${currentFont}"`;
+            ctx.font = `${size * 0.75}px "${currentFont}"`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = 'black';
-            ctx.fillText(character, size / 2, size / 2);
+            ctx.fillText(character, size / 2, size * 0.55);
 
             canvas.toBlob(function(blob) {
                 downloadBlob(blob, filename + '.png');
-                debugLog(`PNG download initiated: ${filename}.png (${size}x${size}px, ${blob.size} bytes)`, 'success');
             });
         }
 
@@ -980,36 +677,12 @@
             URL.revokeObjectURL(url);
         }
 
-        // Initialize font detection on load
-        window.addEventListener('load', function() {
-            debugLog('Application initialized', 'success');
-            debugLog(`Browser: ${navigator.userAgent}`, 'info');
-            debugLog(`Font Access API available: ${'queryLocalFonts' in window}`, 'info');
-            
-            // Setup font file input handler
-            document.getElementById('fontFileInput').addEventListener('change', loadFontFiles);
-            
-            // Check if Font Access API is available
-            if ('queryLocalFonts' in window) {
-                debugLog('Font Access API detected - click "Scan Installed Fonts" to scan system', 'info');
-            } else {
-                debugLog('Font Access API not available - will use canvas detection', 'warning');
-                detectInstalledFonts();
-            }
-        });
-
-        // Load font files from local selection
         async function loadFontFiles(event) {
             const files = event.target.files;
-            if (!files || files.length === 0) {
-                debugLog('No files selected', 'warning');
-                return;
-            }
+            if (!files || files.length === 0) return;
 
-            debugLog(`Loading ${files.length} font file(s)...`, 'info');
             const loadingBanner = document.getElementById('loadingBanner');
-            loadingBanner.innerHTML = `<div class="spinner"></div> Loading ${files.length} font files...`;
-            loadingBanner.className = 'loading-banner';
+            loadingBanner.innerHTML = `Loading ${files.length} font files...`;
 
             let successCount = 0;
             const newFonts = [];
@@ -1019,12 +692,10 @@
                     const arrayBuffer = await file.arrayBuffer();
                     const fontName = file.name.replace(/\.(ttf|otf)$/i, '');
                     
-                    // Create a FontFace and load it
                     const fontFace = new FontFace(fontName, arrayBuffer);
                     await fontFace.load();
                     document.fonts.add(fontFace);
                     
-                    // Store the font data
                     loadedFontFiles[fontName] = {
                         data: arrayBuffer,
                         fileName: file.name,
@@ -1033,47 +704,25 @@
                     
                     newFonts.push(fontName);
                     successCount++;
-                    debugLog(`✓ Loaded font: ${fontName} (${file.name})`, 'success');
-                    
                 } catch (error) {
-                    debugLog(`✗ Failed to load: ${file.name} - ${error.message}`, 'error');
+                    console.error(`Failed to load ${file.name}:`, error);
                 }
             }
 
-            // Update font list
             installedFonts = [...new Set([...installedFonts, ...newFonts])].sort();
             
-            loadingBanner.innerHTML = `✓ Loaded ${successCount} of ${files.length} font file(s) successfully! Ready to use.`;
-            loadingBanner.classList.add('success');
+            loadingBanner.innerHTML = `<button class="load-font-btn" onclick="loadArcGISFonts()">Load CoA ArcGIS Fonts</button>
+            <div style="color: #48bb78; margin-top: 15px; font-weight: 600;">✓ Loaded ${successCount} fonts successfully!</div>`;
             document.getElementById('fontCount').textContent = `(${installedFonts.length} available)`;
-            
-            debugLog(`Successfully loaded ${successCount}/${files.length} fonts`, 'success', newFonts);
-            debugLog(`Total fonts available: ${installedFonts.length}`, 'info');
-            
-            // Show success message with instructions
-            if (successCount > 0) {
-                setTimeout(() => {
-                    alert(`✓ Successfully loaded ${successCount} ESRI fonts!\n\nYou can now:\n1. Search for fonts in the dropdown\n2. Select a font\n3. Enter a character code\n4. Generate preview and download`);
-                }, 500);
-            }
         }
 
-        // Button to load ArcGIS fonts
         function loadArcGISFonts() {
-            debugLog('User clicked "Load ArcGIS Fonts" button', 'info');
-            debugLog('Opening file picker - navigate to: C:\\Program Files\\ArcGIS\\Pro\\Resources\\Fonts', 'info');
-            debugLog('Tip: Press Ctrl+A to select all font files, then click Open', 'info');
-            
-            // Show instructions in console
-            console.log('%c📂 LOADING ARCGIS FONTS', 'background: #48bb78; color: white; padding: 10px; font-size: 14px; font-weight: bold;');
-            console.log('%cInstructions:', 'font-weight: bold; font-size: 12px;');
-            console.log('1. Navigate to: C:\\Program Files\\ArcGIS\\Pro\\Resources\\Fonts');
-            console.log('2. Press Ctrl+A to select all fonts');
-            console.log('3. Click "Open"');
-            console.log('4. Wait for fonts to load');
-            
             document.getElementById('fontFileInput').click();
         }
+
+        window.addEventListener('load', function() {
+            document.getElementById('fontFileInput').addEventListener('change', loadFontFiles);
+        });
     </script>
 </body>
 </html>
