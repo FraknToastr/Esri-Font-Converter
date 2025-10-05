@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESRI Font Symbol Exporter</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a202c;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #2d3748;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            padding: 40px;
+        }
+
+        h1 {
+            color: #e2e8f0;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+
+        .loading-banner {
+            background: #4a5568;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #e2e8f0;
+        }
+
+        .loading-banner.success {
+            background: #2f855a;
+            color: white;
+        }
+
+        .load-font-btn {
+            padding: 12px 24px;
+            font-size: 1em;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .load-font-btn:hover {
+            background: #38a169;
+        }
+
+        .font-instructions {
+            color: #cbd5e0;
+            font-size: 0.9em;
+            margin-top: 12px;
+        }
+
+        .font-path-container {
+            display: flex;
+            flex-direction: column; 
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+
+        .font-path {
+            background: #1a202c;
+            color: #48bb78;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+        }
+
+        .copy-path-btn {
+            background: #48bb78;
+            color: white;
+            border: none;
+            padding: 8px 12px !important; 
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            line-height: normal;
+            margin-top: 5px; 
+            min-width: 80px;
+            /* Add transition for smooth glow effect */
+            transition: all 0.2s ease-out;
+            box-shadow: none; /* Initial state */
+        }
+
+        .copy-path-btn:hover {
+            background: #38a169;
+        }
+
+        .copy-path-btn.copied {
+            background: #2f855a;
+        }
+
+        /* Keyframes for the glowing effect */
+        @keyframes copy-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.8);
+            }
+            50% {
+                box-shadow: 0 0 10px 5px rgba(72, 187, 120, 0.5);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(72, 187, 120, 0);
+            }
+        }
+
+        /* Apply animation on successful copy (glow and fade) */
+        .copy-path-btn.glowing {
+            animation: copy-glow 0.8s ease-out forwards;
+        }
+
+        .input-section {
+            background: #1a202c;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e2e8f0;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #4a5568;
+            background: #2d3748;
+            color: #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        /* FIX: Ensure size input height matches standard height for alignment */
+        #sizeChooserWrapper input {
+            position: absolute; /* Allows them to stack */
+            /* Adjusted top to 28px: (Label height ~20px + Label margin-bottom 8px) = 28px */
+            top: 28px;
+            left: 0;
+            width: 100%; /* Important for fill */
+            height: 44px; /* Explicitly set height to match other inputs and color picker */
+            padding: 12px 15px; /* Match standard padding */
+        }
+        /* END FIX */
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        input::placeholder {
+            color: #718096;
+        }
+        
+        /* Style for the color input */
+        #colorInput {
+            width: 100%;
+            height: 44px; /* Match other input heights (inner content) */
+            padding: 0;
+            border: 2px solid #4a5568;
+            background: #2d3748;
+            border-radius: 8px;
+            cursor: pointer;
+            /* Hide the default color input border/style */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            overflow: hidden; 
+        }
+
+        #colorInput::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        #colorInput::-webkit-color-swatch {
+            border: none;
+            border-radius: 6px;
+        }
+
+        #colorInput::-moz-color-swatch-wrapper {
+            padding: 0;
+        }
+        
+        #colorInput::-moz-color-swatch {
+            border: none;
+            border-radius: 6px;
+        }
+        
+        #fontSearch {
+            padding-right: 90px;
+        }
+
+        .clear-font-btn {
+            position: absolute;
+            right: 12px;
+            top: 38px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            font-weight: 600;
+            z-index: 100;
+        }
+
+        .clear-font-btn:hover {
+            background: #5568d3;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px; /* Ensures spacing to the element below it */
+        }
+
+        /* Three-column row for color, format, and size */
+        .input-row-three-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr; 
+            gap: 15px;
+            margin-bottom: 20px; 
+        }
+
+        .input-row-three-col .input-group {
+            margin-bottom: 0; 
+        }
+
+        /* Adjust the input-group in the last column to make room for absolute positioning */
+        #sizeChooserWrapper {
+            /* Set explicit height to match the vertical space of the other two inputs/buttons */
+            /* Calculated as: label (~20px) + margin-bottom (8px) + input/button (48px total height) = 76px */
+            height: 76px; 
+            margin-bottom: 0;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 10px 20px;
+            border: 2px solid #4a5568;
+            background: #2d3748;
+            color: #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-download {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-download:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(72, 187, 120, 0.3);
+        }
+
+        .btn-download:disabled {
+            background: #4a5568;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .preview-section {
+            margin-top: 30px;
+        }
+
+        .preview-title {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 15px;
+        }
+
+        .preview-box {
+            background: #1a202c;
+            border: 2px dashed #4a5568;
+            border-radius: 12px;
+            min-height: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .preview-content {
+            text-align: center;
+            width: 100%;
+        }
+
+        .symbol-preview {
+            font-size: 140px;
+            line-height: 1;
+            margin-bottom: 40px;
+            color: #e2e8f0;
+        }
+
+        .symbol-info {
+            color: #a0aec0;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .empty-state {
+            color: #718096;
+            font-size: 1.1em;
+        }
+
+        .font-dropdown {
+            position: absolute;
+            background: #1a202c;
+            border: 2px solid #4a5568;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            width: 100%;
+            margin-top: 5px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .font-option {
+            padding: 12px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid #2d3748;
+            color: #e2e8f0;
+        }
+
+        .font-option:hover {
+            background: #2d3748;
+        }
+
+        .no-results {
+            padding: 15px;
+            text-align: center;
+            color: #718096;
+            font-style: italic;
+        }
+
+        /* --- Collapsible Styles --- */
+        #oskLabel {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0 !important; 
+            font-weight: 600;
+            font-size: 0.9em;
+            color: #e2e8f0;
+            padding: 8px 0; /* Add padding to look like a clickable header */
+            border-top: 1px solid #4a5568; /* Separator from inputs above */
+            margin-top: 10px;
+        }
+
+        #onscreenKeyboardContainer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            padding-top: 0; 
+        }
+
+        #onscreenKeyboardContainer.expanded {
+            /* Adjusted max-height to fit remaining inputs and OSK */
+            max-height: 700px; 
+            padding-top: 10px; 
+        }
+
+        #toggleIcon {
+            transform: rotate(0deg);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #onscreenKeyboardContainer.expanded #toggleIcon {
+            transform: rotate(-180deg);
+        }
+        /* --- END Collapsible Styles --- */
+
+        /* --- Keyboard Layout Styles --- */
+        .keyboard-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            padding: 10px;
+            background: #2d3748;
+            border-radius: 8px;
+            border: 1px solid #4a5568;
+            font-size: 1.1em;
+            margin-bottom: 0; /* No margin as it's the last element in the collapsible container */
+        }
+
+        .key-row {
+            display: flex;
+            width: 100%;
+            gap: 4px;
+        }
+
+        .key-btn {
+            flex-grow: 1;
+            height: 45px;
+            padding: 0;
+            border: none;
+            border-radius: 4px;
+            background: #4a5568;
+            color: #e2e8f0;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.1s, transform 0.1s;
+            text-align: center;
+            line-height: 45px;
+            position: relative;
+            font-family: inherit;
+            overflow: hidden; 
+        }
+
+        .key-btn:hover {
+            background: #667eea;
+        }
+
+        /* Key content for default/shifted states */
+        .key-btn .key-main { display: block; line-height: 1; padding-top: 15px; }
+        .key-btn .key-shift { display: none; }
+        .keyboard-layout.shifted .key-btn .key-main { display: none; }
+        .keyboard-layout.shifted .key-btn .key-shift { display: block; line-height: 1; padding-top: 15px; }
+
+        /* Small character keys (e.g., number row secondary symbols) */
+        .key-btn[data-shift]:not([data-char]) .key-main,
+        .key-btn[data-shift]:not([data-char]) .key-shift {
+            font-size: 0.7em;
+            line-height: 1;
+            padding-top: 5px;
+        }
+        .key-btn[data-shift]:not([data-char]) .key-shift {
+            font-size: 1.1em;
+            line-height: 1;
+            padding-top: 25px;
+        }
+        
+        .key-btn[data-shift]:not([data-char]):after {
+            content: attr(data-shift);
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 0.7em;
+            opacity: 0.7;
+            display: block;
+            color: #a0aec0;
+        }
+        
+        .keyboard-layout.shifted .key-btn[data-shift]:not([data-char]):after {
+            content: attr(data-main);
+        }
+
+        .key-btn.special {
+            background: #1a202c;
+            color: #cbd5e0;
+            flex-grow: 0;
+            width: auto;
+            padding: 0 10px;
+            font-size: 0.9em;
+            font-weight: 600;
+            line-height: 45px;
+            text-align: center;
+        }
+
+        .key-btn.special:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Specific key widths */
+        .key-row .backspace { flex-grow: 1.5; padding: 0 !important; }
+        .key-row .tab { flex-grow: 1.25; }
+        .key-row .enter { flex-grow: 2; }
+        .key-row .shift-left, .key-row .shift-right { flex-grow: 1.7; }
+        .key-row .space { flex-grow: 8; background: #1a202c; }
+        .key-row .space:hover { background: #4a5568; }
+
+        /* CAPS LOCK KEY WIDTH FIX */
+        .key-row .caps-lock { flex-grow: 1.5; } 
+
+        /* Last Row Key Spacing */
+        .key-row:last-child .key-btn.special:nth-child(1) { flex-grow: 1.25; } 
+        .key-row:last-child .key-btn.special:nth-child(2) { flex-grow: 1.25; } 
+        .key-row:last-child .key-btn.space { flex-grow: 6; } 
+        .key-row:last-child .key-btn.special:nth-child(4) { flex-grow: 1.25; } 
+        .key-row:last-child .key-btn.special:nth-child(5) { flex-grow: 1.25; } 
+        
+        .key-btn[data-char="Shift"] {
+            background: #667eea;
+            color: white;
+        }
+        
+        .key-btn[data-char="Shift"].active {
+            background: #48bb78;
+        }
+        
+        /* Hide shift characters on non-shifted keys unless the keyboard is shifted */
+        .key-btn .key-shift { display: none; }
+        .keyboard-layout.shifted .key-btn .key-shift { display: block; }
+        /* --- END Keyboard Styles --- */
+
+
+        @media (max-width: 768px) {
+            .input-row,
+            .input-row-three-col {
+                grid-template-columns: 1fr;
+            }
+            /* Reset absolute positioning for size inputs on small screens */
+            #sizeChooserWrapper input {
+                position: static;
+                height: auto; /* Revert explicit height for stacking */
+            }
+            #sizeChooserWrapper {
+                height: auto; /* Allow height to collapse when inputs stack */
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            /* Media queries for OSK */
+            .key-row {
+                gap: 2px;
+            }
+            .key-btn {
+                height: 35px;
+                line-height: 35px;
+                font-size: 0.9em;
+            }
+            .key-btn.special {
+                line-height: 35px;
+                padding: 0 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ESRI Font Symbol Exporter</h1>
+
+        <div id="loadingBanner" class="loading-banner">
+            </div>
+        
+        <input type="file" id="fontFileInput" accept=".ttf,.otf" multiple style="display: none;">
+
+
+        <div class="input-section">
+            <div class="input-group">
+                <label for="fontSearch">Select ESRI Font <span id="fontCount"></span></label>
+                <input type="text" id="fontSearch" placeholder="Search loaded fonts..." autocomplete="off">
+                <button class="clear-font-btn" id="clearFontBtn" onclick="clearFontSelection()" style="display: none;">Clear</button>
+                <div id="fontDropdown" class="font-dropdown" style="display: none;"></div>
+                <input type="hidden" id="fontSelect">
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label for="keyInput">Key Character</label>
+                    <input type="text" id="keyInput" placeholder="e.g., A, !, Space" maxlength="10">
+                </div>
+
+                <div class="input-group">
+                    <label for="decimalInput">Decimal Code</label>
+                    <input type="number" id="decimalInput" placeholder="e.g., 65" min="0" max="65535">
+                </div>
+
+                <div class="input-group">
+                    <label for="hexInput">Hex Code</label>
+                    <input type="text" id="hexInput" placeholder="e.g., 41" maxlength="4">
+                </div>
+            </div>
+            <div class="input-group">
+                <label id="oskLabel">
+                    Export/Keyboard Options <span id="toggleIcon" class="toggle-icon">▼</span>
+                </label>
+                
+                <div id="onscreenKeyboardContainer" class="collapsible-content expanded">
+                    
+                    <div class="input-row-three-col">
+                        <div class="input-group">
+                            <label for="colorInput">Symbol Color</label>
+                            <input type="color" id="colorInput" value="#000000">
+                        </div>
+                        <div class="input-group">
+                            <label>Export Format</label>
+                            <div class="toggle-group">
+                                <button class="toggle-btn active" data-format="svg">SVG</button>
+                                <button class="toggle-btn" data-format="png">PNG</button>
+                            </div>
+                        </div>
+                        <div class="input-group" id="sizeChooserWrapper">
+                            <label for="svgSizeInput" id="sizeLabel">SVG Size (pixels)</label>
+                            
+                            <input type="number" id="svgSizeInput" value="512" min="64" max="2048" step="64" style="display: block;">
+                            
+                            <input type="number" id="sizeInput" value="512" min="64" max="2048" step="64" style="display: none;">
+                        </div>
+                        </div>
+                    <div style="margin-top: 20px;">
+                        <label>On-Screen Keyboard</label>
+                        <div id="onscreenKeyboard" class="keyboard-layout">
+                            <div class="key-row">
+                                <button class="key-btn" data-main="`" data-shift="~"><span class="key-main">`</span><span class="key-shift">~</span></button>
+                                <button class="key-btn" data-main="1" data-shift="!"><span class="key-main">1</span><span class="key-shift">!</span></button>
+                                <button class="key-btn" data-main="2" data-shift="@"><span class="key-main">2</span><span class="key-shift">@</span></button>
+                                <button class="key-btn" data-main="3" data-shift="#"><span class="key-main">3</span><span class="key-shift">#</span></button>
+                                <button class="key-btn" data-main="4" data-shift="$"><span class="key-main">4</span><span class="key-shift">$</span></button>
+                                <button class="key-btn" data-main="5" data-shift="%"><span class="key-main">5</span><span class="key-shift">%</span></button>
+                                <button class="key-btn" data-main="6" data-shift="^"><span class="key-main">6</span><span class="key-shift">^</span></button>
+                                <button class="key-btn" data-main="7" data-shift="&"><span class="key-main">7</span><span class="key-shift">&amp;</span></button>
+                                <button class="key-btn" data-main="8" data-shift="*"><span class="key-main">8</span><span class="key-shift">*</span></button>
+                                <button class="key-btn" data-main="9" data-shift="("><span class="key-main">9</span><span class="key-shift">)</span></button>
+                                <button class="key-btn" data-main="0" data-shift=")"><span class="key-main">0</span><span class="key-shift">)</span></button>
+                                <button class="key-btn" data-main="-" data-shift="_"><span class="key-main">-</span><span class="key-shift">_</span></button>
+                                <button class="key-btn" data-main="=" data-shift="+"><span class="key-main">=</span><span class="key-shift">+</span></button>
+                                <button class="key-btn special backspace" data-char="backspace"><span>⌫ Backspace</span></button>
+                            </div>
+
+                            <div class="key-row">
+                                <button class="key-btn special tab" data-char="tab"><span>Tab</span></button>
+                                <button class="key-btn" data-main="q" data-shift="Q"><span class="key-main">q</span><span class="key-shift">Q</span></button>
+                                <button class="key-btn" data-main="w" data-shift="W"><span class="key-main">w</span><span class="key-shift">W</span></button>
+                                <button class="key-btn" data-main="e" data-shift="E"><span class="key-main">e</span><span class="key-shift">E</span></button>
+                                <button class="key-btn" data-main="r" data-shift="R"><span class="key-main">r</span><span class="key-shift">R</span></button>
+                                <button class="key-btn" data-main="t" data-shift="T"><span class="key-main">t</span><span class="key-shift">T</span></button>
+                                <button class="key-btn" data-main="y" data-shift="Y"><span class="key-main">y</span><span class="key-shift">Y</span></button>
+                                <button class="key-btn" data-main="u" data-shift="U"><span class="key-main">u</span><span class="key-shift">U</span></button>
+                                <button class="key-btn" data-main="i" data-shift="I"><span class="key-main">i</span><span class="key-shift">I</span></button>
+                                <button class="key-btn" data-main="o" data-shift="O"><span class="key-main">o</span><span class="key-shift">O</span></button>
+                                <button class="key-btn" data-main="p" data-shift="P"><span class="key-main">p</span><span class="key-shift">P</span></button>
+                                <button class="key-btn" data-main="[" data-shift="{"><span class="key-main">[</span><span class="key-shift">{</span></button>
+                                <button class="key-btn" data-main="]" data-shift="}"><span class="key-main">]</span><span class="key-shift">}</span></button>
+                                <button class="key-btn" data-main="\" data-shift="|"><span class="key-main">\</span><span class="key-shift">|</span></button>
+                            </div>
+
+                            <div class="key-row">
+                                <button class="key-btn special caps-lock" data-char="a-lock"><span>Caps</span></button>
+                                <button class="key-btn" data-main="a" data-shift="A"><span class="key-main">a</span><span class="key-shift">A</span></button>
+                                <button class="key-btn" data-main="s" data-shift="S"><span class="key-main">s</span><span class="key-shift">S</span></button>
+                                <button class="key-btn" data-main="d" data-shift="D"><span class="key-main">d</span><span class="key-shift">D</span></button>
+                                <button class="key-btn" data-main="f" data-shift="F"><span class="key-main">f</span><span class="key-shift">F</span></button>
+                                <button class="key-btn" data-main="g" data-shift="G"><span class="key-main">g</span><span class="key-shift">G</span></button>
+                                <button class="key-btn" data-main="h" data-shift="H"><span class="key-main">h</span><span class="key-shift">H</span></button>
+                                <button class="key-btn" data-main="j" data-shift="J"><span class="key-main">j</span><span class="key-shift">J</span></button>
+                                <button class="key-btn" data-main="k" data-shift="K"><span class="key-main">k</span><span class="key-shift">K</span></button>
+                                <button class="key-btn" data-main="l" data-shift="L"><span class="key-main">l</span><span class="key-shift">L</span></button>
+                                <button class="key-btn" data-main=";" data-shift=":"><span class="key-main">;</span><span class="key-shift">:</span></button>
+                                <button class="key-btn" data-main="'" data-shift='"'><span class="key-main">'</span><span class="key-shift">"</span></button>
+                                <button class="key-btn special enter" data-char="Enter"><span>Enter ⏎</span></button>
+                            </div>
+
+                            <div class="key-row">
+                                <button class="key-btn special shift-left" data-char="Shift"><span>⇧ Shift</span></button>
+                                <button class="key-btn" data-main="z" data-shift="Z"><span class="key-main">z</span><span class="key-shift">Z</span></button>
+                                <button class="key-btn" data-main="x" data-shift="X"><span class="key-main">x</span><span class="key-shift">X</span></button>
+                                <button class="key-btn" data-main="c" data-shift="C"><span class="key-main">c</span><span class="key-shift">C</span></button>
+                                <button class="key-btn" data-main="v" data-shift="V"><span class="key-main">v</span><span class="key-shift">V</span></button>
+                                <button class="key-btn" data-main="b" data-shift="B"><span class="key-main">b</span><span class="key-shift">B</span></button>
+                                <button class="key-btn" data-main="n" data-shift="N"><span class="key-main">n</span><span class="key-shift">N</span></button>
+                                <button class="key-btn" data-main="m" data-shift="M"><span class="key-main">m</span><span class="key-shift">M</span></button>
+                                <button class="key-btn" data-main="," data-shift="&lt;"><span class="key-main">,</span><span class="key-shift">&lt;</span></button>
+                                <button class="key-btn" data-main="." data-shift="&gt;"><span class="key-main">.</span><span class="key-shift">&gt;</span></button>
+                                <button class="key-btn" data-main="/" data-shift="?"><span class="key-main">/</span><span class="key-shift">?</span></button>
+                                <button class="key-btn special shift-right" data-char="Shift"><span>⇧ Shift</span></button>
+                            </div>
+
+                            <div class="key-row">
+                                <button class="key-btn special" data-char="ctrl"><span>Ctrl</span></button>
+                                <button class="key-btn special" data-char="alt"><span>Alt</span></button>
+                                <button class="key-btn space" data-char="Space"><span>Space</span></button>
+                                <button class="key-btn special" data-char="alt"><span>Alt</span></button>
+                                <button class="key-btn special" data-char="ctrl"><span>Ctrl</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn-generate" onclick="generatePreview()">Generate Preview</button>
+                <button class="btn-download" id="downloadBtn" disabled onclick="downloadSymbol()">Download Symbol</button>
+            </div>
+            </div>
+
+        <div class="preview-section">
+            <div class="preview-title">Preview</div>
+            <div class="preview-box" id="previewBox">
+                <div class="empty-state">Enter a character code and click "Generate Preview"</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let installedFonts = [];
+        let loadedFontFiles = {};
+        let currentFormat = 'svg';
+        let currentCharCode = null;
+        let currentFont = null;
+
+        const fontSearch = document.getElementById('fontSearch');
+        const fontDropdown = document.getElementById('fontDropdown');
+        const fontSelect = document.getElementById('fontSelect');
+        const clearFontBtn = document.getElementById('clearFontBtn');
+        const fontFileInput = document.getElementById('fontFileInput');
+        const colorInput = document.getElementById('colorInput'); 
+
+        // Function to rebuild the dynamic content inside the loading banner
+        function reconstructLoadingBanner(successCount = null) {
+            const loadingBanner = document.getElementById('loadingBanner');
+            
+            let successMessage = '';
+            if (successCount !== null) {
+                successMessage = `<div style="color: #48bb78; margin-top: 15px; font-weight: 600;">✓ Loaded ${successCount} fonts successfully!</div>`;
+            }
+
+            loadingBanner.innerHTML = `
+                <button class="load-font-btn" onclick="loadArcGISFonts()">Load ArcGIS Fonts</button>
+                <div class="font-instructions">
+                    Click button above, then navigate to:
+                </div>
+                <div class="font-path-container">
+                    <div class="font-path">C:\\Program Files\\ArcGIS\\Pro\\Resources\\Fonts</div>
+                    <button class="copy-path-btn" onclick="copyFontPath()">Copy</button>
+                </div>
+                <div class="font-instructions" style="margin-top: 8px;">
+                    Select all font files (Ctrl+A) and click Open
+                </div>
+                ${successMessage}
+            `;
+        }
+
+
+        function copyFontPath() {
+            const path = 'C:\\Program Files\\ArcGIS\\Pro\\Resources\\Fonts';
+            const btn = event.target;
+
+            navigator.clipboard.writeText(path).then(() => {
+                const originalText = btn.textContent;
+                // 1. Change text and color for success feedback
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                
+                // 2. Start the glowing animation
+                btn.classList.remove('glowing');
+                void btn.offsetWidth; // Trigger reflow
+                btn.classList.add('glowing');
+
+                setTimeout(() => {
+                    // 3. Revert text and color after success feedback is complete
+                    btn.textContent = originalText;
+                    btn.classList.remove('copied');
+                }, 2000); // Keep text/color for 2s
+
+                setTimeout(() => {
+                    // 4. Remove glowing class after animation finishes (0.8s)
+                    btn.classList.remove('glowing'); 
+                }, 800);
+
+            }).catch(err => {
+                // Handle clipboard failure gracefully
+                console.error('Could not copy to clipboard:', err);
+                const originalText = btn.textContent;
+                btn.textContent = 'Failed!';
+                btn.style.backgroundColor = '#e53e3e';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.backgroundColor = '#48bb78';
+                }, 2000);
+            });
+        }
+
+
+        function populateFontDropdown(filterText = '') {
+            const filtered = installedFonts.filter(font => 
+                font.toLowerCase().includes(filterText.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                fontDropdown.innerHTML = '<div class="no-results">No fonts loaded. Please load font files.</div>';
+            } else {
+                fontDropdown.innerHTML = filtered.map(font => 
+                    `<div class="font-option" data-font="${font}">${font}</div>`
+                ).join('');
+
+                document.querySelectorAll('.font-option').forEach(option => {
+                    option.addEventListener('click', function() {
+                        selectFont(this.dataset.font);
+                    });
+                });
+            }
+        }
+
+        function selectFont(fontName) {
+            fontSearch.value = fontName;
+            fontSelect.value = fontName;
+            currentFont = fontName;
+            fontDropdown.style.display = 'none';
+            clearFontBtn.style.display = 'block';
+        }
+
+        function clearFontSelection() {
+            fontSearch.value = '';
+            fontSelect.value = '';
+            currentFont = null;
+            clearFontBtn.style.display = 'none';
+            populateFontDropdown('');
+            fontDropdown.style.display = 'block';
+            fontSearch.focus();
+        }
+
+        fontSearch.addEventListener('focus', function() {
+            populateFontDropdown(this.value);
+            fontDropdown.style.display = 'block';
+        });
+
+        fontSearch.addEventListener('input', function() {
+            populateFontDropdown(this.value);
+            fontDropdown.style.display = 'block';
+            if (this.value && fontSelect.value) {
+                clearFontBtn.style.display = 'block';
+            }
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.input-group')) {
+                fontDropdown.style.display = 'none';
+            }
+        });
+
+        document.querySelectorAll('.toggle-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentFormat = this.dataset.format;
+                
+                const svgInput = document.getElementById('svgSizeInput');
+                const pngInput = document.getElementById('sizeInput');
+                const sizeLabel = document.getElementById('sizeLabel');
+
+                // Toggle display of SVG and PNG options
+                if (currentFormat === 'png') {
+                    pngInput.style.display = 'block';
+                    svgInput.style.display = 'none';
+                    sizeLabel.textContent = 'PNG Size (pixels)';
+                } else {
+                    pngInput.style.display = 'none';
+                    svgInput.style.display = 'block';
+                    sizeLabel.textContent = 'SVG Size (pixels)';
+                }
+            });
+        });
+
+        const keyInput = document.getElementById('keyInput');
+        const decimalInput = document.getElementById('decimalInput');
+        const hexInput = document.getElementById('hexInput');
+
+        // Function to update all input fields from a character or string
+        const updateInputsFromKey = (char) => {
+             if (char.toLowerCase() === 'space') {
+                keyInput.value = 'Space';
+            } else if (char.length === 1) {
+                keyInput.value = char;
+            } else {
+                keyInput.value = '';
+            }
+            
+            let val = keyInput.value.trim();
+            let code = 0;
+
+            if (val.toLowerCase() === 'space') {
+                code = 32;
+            } else if (val.toUpperCase().startsWith('U+') && val.length > 2) {
+                // Handle U+XXXX format
+                code = parseInt(val.substring(2), 16);
+            } else if (val.length > 0) {
+                // Handle single character
+                code = val.charCodeAt(0);
+            }
+            
+            if (!isNaN(code) && code >= 0 && code <= 65535) {
+                decimalInput.value = code;
+                hexInput.value = code.toString(16).toUpperCase().padStart(4, '0');
+            } else {
+                decimalInput.value = '';
+                hexInput.value = '';
+            }
+        };
+
+        keyInput.addEventListener('input', function() {
+            updateInputsFromKey(this.value);
+        });
+
+        decimalInput.addEventListener('input', function() {
+            const code = parseInt(this.value);
+            if (code >= 0 && code <= 65535) {
+                hexInput.value = code.toString(16).toUpperCase().padStart(4, '0');
+                keyInput.value = code === 32 ? 'Space' : 
+                               (code >= 33 && code <= 126) ? String.fromCharCode(code) : 
+                               `U+${code.toString(16).toUpperCase().padStart(4, '0')}`;
+            } else {
+                keyInput.value = '';
+                hexInput.value = '';
+            }
+        });
+
+        hexInput.addEventListener('input', function() {
+            const code = parseInt(this.value, 16);
+            if (!isNaN(code) && code >= 0 && code <= 65535) {
+                decimalInput.value = code;
+                keyInput.value = code === 32 ? 'Space' : 
+                               (code >= 33 && code <= 126) ? String.fromCharCode(code) : 
+                               `U+${code.toString(16).toUpperCase().padStart(4, '0')}`;
+            } else {
+                decimalInput.value = '';
+                hexInput.value = '';
+            }
+        });
+
+
+        // ON-SCREEN KEYBOARD LOGIC START
+        const keyboard = document.getElementById('onscreenKeyboard');
+        let isShifted = false;
+
+        if (keyboard) { 
+            keyboard.addEventListener('click', function(e) {
+                const btn = e.target.closest('.key-btn');
+                if (!btn) return;
+                
+                const charType = btn.dataset.char;
+
+                if (charType === 'Shift') {
+                    isShifted = !isShifted;
+                    keyboard.classList.toggle('shifted', isShifted);
+                    document.querySelectorAll('.key-btn[data-char="Shift"]').forEach(s => s.classList.toggle('active', isShifted));
+                    return;
+                }
+
+                if (charType === 'backspace') {
+                    updateInputsFromKey(''); // Clear the single character
+                } else if (charType === 'Space') {
+                    updateInputsFromKey('Space');
+                } else if (btn.dataset.main) {
+                    // Character keys (letters, numbers, symbols)
+                    let char = isShifted ? (btn.dataset.shift || btn.dataset.main) : btn.dataset.main;
+                    
+                    // If it's a letter, respect the shift key state for case
+                    if (char.length === 1 && /[a-z]/i.test(char)) {
+                        char = isShifted ? char.toUpperCase() : char.toLowerCase();
+                    }
+
+                    updateInputsFromKey(char);
+
+                    // Auto-off shift mode after a character is typed
+                    if (isShifted && char.length === 1) {
+                        isShifted = false;
+                        keyboard.classList.remove('shifted');
+                        document.querySelectorAll('.key-btn[data-char="Shift"]').forEach(s => s.classList.remove('active'));
+                    }
+                }
+                // Ignore other special keys (Caps, Tab, Alt, Enter) for simplicity
+            });
+        }
+        // ON-SCREEN KEYBOARD LOGIC END
+
+        // COLLAPSIBLE LOGIC START (now for export options and OSK)
+        function toggleOsk() {
+            const container = document.getElementById('onscreenKeyboardContainer');
+            container.classList.toggle('expanded');
+        }
+        // COLLAPSIBLE LOGIC END
+
+        function generatePreview() {
+            const selectedFont = fontSelect.value;
+            const decimalCode = parseInt(decimalInput.value);
+            const selectedColor = colorInput.value; 
+            
+            if (!selectedFont) {
+                alert('Please select a font');
+                return;
+            }
+            
+            if (!decimalCode || isNaN(decimalCode)) {
+                alert('Please enter a valid character code');
+                return;
+            }
+
+            currentFont = selectedFont;
+            currentCharCode = decimalCode;
+            
+            const character = String.fromCharCode(decimalCode);
+            const previewBox = document.getElementById('previewBox');
+            
+            // Apply selectedColor to the symbol-preview style
+            previewBox.innerHTML = `
+                <div class="preview-content">
+                    <div class="symbol-preview" style="font-family: '${currentFont}', sans-serif; color: ${selectedColor};">${character}</div>
+                    <div class="symbol-info">
+                        <strong>Character:</strong> ${keyInput.value}<br><br>
+                        <strong>Decimal:</strong> ${decimalCode} | <strong>Hex:</strong> 0x${decimalCode.toString(16).toUpperCase().padStart(4, '0')}<br><br>
+                        <strong>Font:</strong> ${currentFont} | <strong>Color:</strong> ${selectedColor.toUpperCase()}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('downloadBtn').disabled = false;
+        }
+
+        function downloadSymbol() {
+            if (!currentCharCode || !currentFont) {
+                alert('Please generate a preview first');
+                return;
+            }
+
+            const character = String.fromCharCode(currentCharCode);
+            const filename = `${currentFont.replace(/\s+/g, '_')}_${currentCharCode}`;
+
+            if (currentFormat === 'svg') {
+                downloadSVG(character, filename);
+            } else {
+                downloadPNG(character, filename);
+            }
+        }
+
+        function downloadSVG(character, filename) {
+            const size = parseInt(document.getElementById('svgSizeInput').value) || 512; 
+            const symbolColor = colorInput.value; 
+            
+            if (!loadedFontFiles[currentFont]) {
+                alert('Error: Font data not found. Please reload the font.');
+                return;
+            }
+            
+            const fontData = loadedFontFiles[currentFont].data;
+            const uint8Array = new Uint8Array(fontData);
+            let binaryString = '';
+            for (let i = 0; i < uint8Array.length; i++) {
+                binaryString += String.fromCharCode(uint8Array[i]);
+            }
+            const base64Font = btoa(binaryString);
+            
+            const svg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style type="text/css">
+      @font-face {
+        font-family: "EmbeddedESRI";
+        src: url("data:font/truetype;base64,${base64Font}") format("truetype");
+      }
+    </style>
+  </defs>
+  <rect width="${size}" height="${size}" fill="transparent"/>
+  <text x="50%" y="65%" 
+        font-family="EmbeddedESRI" 
+        font-size="${size * 0.75}" 
+        text-anchor="middle" 
+        dominant-baseline="middle"
+        fill="${symbolColor}">${character}</text> 
+</svg>`;
+
+            const blob = new Blob([svg], { type: 'image/svg+xml' });
+            downloadBlob(blob, filename + '.svg');
+        }
+
+        async function downloadPNG(character, filename) {
+            const size = parseInt(document.getElementById('sizeInput').value) || 512;
+            const symbolColor = colorInput.value; 
+            
+            if (!loadedFontFiles[currentFont]) {
+                alert('Error: Font data not found. Please reload the font.');
+                return;
+            }
+            
+            await document.fonts.ready;
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+
+            ctx.clearRect(0, 0, size, size);
+            ctx.font = `${size * 0.75}px "${currentFont}"`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillStyle = symbolColor; 
+            ctx.fillText(character, size / 2, size * 0.55);
+
+            canvas.toBlob(function(blob) {
+                downloadBlob(blob, filename + '.png');
+            });
+        }
+
+        function downloadBlob(blob, filename) {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        async function loadFontFiles(event) {
+            const files = event.target.files;
+            
+            if (!files || files.length === 0) {
+                reconstructLoadingBanner(null);
+                return;
+            }
+
+            const loadingBanner = document.getElementById('loadingBanner');
+            loadingBanner.innerHTML = `Loading ${files.length} font files...`;
+
+            let successCount = 0;
+            const newFonts = [];
+
+            for (const file of files) {
+                try {
+                    const arrayBuffer = await file.arrayBuffer();
+                    const fontName = file.name.replace(/\.(ttf|otf)$/i, '');
+                    
+                    // Skip if font is already loaded/scanned
+                    if (installedFonts.includes(fontName) && loadedFontFiles[fontName]) {
+                        successCount++;
+                        continue;
+                    }
+
+                    const fontFace = new FontFace(fontName, arrayBuffer);
+                    await fontFace.load();
+                    document.fonts.add(fontFace);
+                    
+                    loadedFontFiles[fontName] = {
+                        data: arrayBuffer,
+                        fileName: file.name,
+                        fontFace: fontFace
+                    };
+                    
+                    newFonts.push(fontName);
+                    successCount++;
+                } catch (error) {
+                    console.error(`Failed to load ${file.name}:`, error);
+                }
+            }
+
+            // Update the master list
+            installedFonts = [...new Set([...installedFonts, ...newFonts])].sort();
+            
+            // Reconstruct the banner with the success message
+            reconstructLoadingBanner(successCount);
+            
+            document.getElementById('fontCount').textContent = `(${installedFonts.length} available)`;
+            
+            // Repopulate the font dropdown to show the newly loaded fonts
+            populateFontDropdown('');
+        }
+
+        function loadArcGISFonts() {
+            // Trigger the hidden file input
+            fontFileInput.click();
+        }
+
+        window.addEventListener('load', function() {
+            // 1. Set up the initial loading banner structure
+            reconstructLoadingBanner(null);
+
+            // 2. Attach the listener to the file input (it is outside the banner now)
+            fontFileInput.addEventListener('change', loadFontFiles);
+
+            // 3. Initialize the font list and count to 0
+            installedFonts = []; 
+            document.getElementById('fontCount').textContent = `(0 available)`;
+
+            // 4. Attach toggle event listener to OSK label (now the main input details label)
+            const oskLabel = document.getElementById('oskLabel');
+            if (oskLabel) {
+                oskLabel.addEventListener('click', toggleOsk);
+            }
+            
+            // 5. Attach event listener for live color update
+            colorInput.addEventListener('input', function() {
+                const symbolPreviewElement = document.querySelector('#previewBox .symbol-preview');
+                if (symbolPreviewElement) {
+                    symbolPreviewElement.style.color = this.value;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
