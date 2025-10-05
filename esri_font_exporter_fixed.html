@@ -33,75 +33,77 @@
             font-size: 2em;
         }
 
+        /* --- SLIM HEADER STYLES --- */
         .loading-banner {
             background: #4a5568;
-            padding: 20px;
+            padding: 10px 20px; /* Reduced vertical padding */
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
             color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
-        .loading-banner.success {
-            background: #2f855a;
-            color: white;
+        
+        .header-button-row {
+            display: flex;
+            gap: 15px; /* Space between the two buttons */
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
 
         .load-font-btn {
-            padding: 12px 24px;
-            font-size: 1em;
+            padding: 8px 18px; /* Slimmer button */
+            font-size: 0.9em;
             background: #48bb78;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            margin-bottom: 15px;
+            margin-bottom: 0; /* Remove previous margin */
+            transition: all 0.3s;
         }
 
         .load-font-btn:hover {
             background: #38a169;
         }
 
-        .font-instructions {
-            color: #cbd5e0;
-            font-size: 0.9em;
-            margin-top: 12px;
-        }
-
-        .font-path-container {
-            display: flex;
-            flex-direction: column; 
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            justify-content: center;
-        }
-
-        .font-path {
-            background: #1a202c;
-            color: #48bb78;
-            padding: 8px 12px;
-            border-radius: 6px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.85em;
-        }
-
+        /* Re-purpose copy button style for the new layout */
         .copy-path-btn {
             background: #48bb78;
             color: white;
             border: none;
-            padding: 8px 12px !important; 
-            border-radius: 6px;
+            padding: 8px 18px !important; /* Matches Load button padding */
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 0.85em;
+            font-size: 0.9em;
             font-weight: 600;
             line-height: normal;
-            margin-top: 5px; 
-            min-width: 80px;
-            /* Add transition for smooth glow effect */
+            margin-top: 0; 
+            min-width: auto;
             transition: all 0.2s ease-out;
-            box-shadow: none; /* Initial state */
+            box-shadow: none;
+        }
+
+        .load-status-bar {
+            width: 100%;
+            text-align: center;
+            margin-top: 5px; 
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #48bb78; /* Success color */
+            min-height: 1.2em;
+        }
+        /* --- END SLIM HEADER STYLES --- */
+
+        /* Remaining styles are inherited from previous versions */
+        .copy-path-btn-text {
+            white-space: nowrap; 
+            font-size: 1em;
+            font-weight: 600;
         }
 
         .copy-path-btn:hover {
@@ -141,6 +143,13 @@
             margin-bottom: 20px;
             position: relative;
         }
+        
+        /* NEW: Flex container for Input and Button */
+        .input-with-button-wrap {
+            display: flex;
+            align-items: center; 
+            gap: 10px;
+        }
 
         label {
             display: block;
@@ -161,17 +170,14 @@
             transition: border-color 0.3s;
         }
         
-        /* FIX: Ensure size input height matches standard height for alignment */
         #sizeChooserWrapper input {
-            position: absolute; /* Allows them to stack */
-            /* Adjusted top to 28px: (Label height ~20px + Label margin-bottom 8px) = 28px */
+            position: absolute; 
             top: 28px;
             left: 0;
-            width: 100%; /* Important for fill */
-            height: 44px; /* Explicitly set height to match other inputs and color picker */
-            padding: 12px 15px; /* Match standard padding */
+            width: 100%; 
+            height: 44px; 
+            padding: 12px 15px; 
         }
-        /* END FIX */
 
         input:focus, select:focus {
             outline: none;
@@ -182,16 +188,14 @@
             color: #718096;
         }
         
-        /* Style for the color input */
         #colorInput {
             width: 100%;
-            height: 44px; /* Match other input heights (inner content) */
+            height: 44px; 
             padding: 0;
             border: 2px solid #4a5568;
             background: #2d3748;
             border-radius: 8px;
             cursor: pointer;
-            /* Hide the default color input border/style */
             -webkit-appearance: none;
             -moz-appearance: none;
             appearance: none;
@@ -217,22 +221,24 @@
         }
         
         #fontSearch {
-            padding-right: 90px;
+            padding-right: 15px; /* Restored normal padding */
+            flex-grow: 1; /* Input takes up available space */
+            width: auto; /* Override previous 100% width */
         }
 
         .clear-font-btn {
-            position: absolute;
-            right: 12px;
-            top: 38px;
+            /* Positioning logic removed for flexbox alignment */
             background: #667eea;
             color: white;
             border: none;
-            padding: 8px 16px;
+            padding: 8px 16px; 
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.85em;
             font-weight: 600;
             z-index: 100;
+            flex-shrink: 0; /* Prevents button from shrinking */
+            height: 44px; /* Matches input height for perfect alignment */
         }
 
         .clear-font-btn:hover {
@@ -243,10 +249,9 @@
             display: grid;
             grid-template-columns: 2fr 1fr 1fr;
             gap: 15px;
-            margin-bottom: 20px; /* Ensures spacing to the element below it */
+            margin-bottom: 20px; 
         }
 
-        /* Three-column row for color, format, and size */
         .input-row-three-col {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr; 
@@ -258,10 +263,7 @@
             margin-bottom: 0; 
         }
 
-        /* Adjust the input-group in the last column to make room for absolute positioning */
         #sizeChooserWrapper {
-            /* Set explicit height to match the vertical space of the other two inputs/buttons */
-            /* Calculated as: label (~20px) + margin-bottom (8px) + input/button (48px total height) = 76px */
             height: 76px; 
             margin-bottom: 0;
         }
@@ -421,8 +423,8 @@
             font-weight: 600;
             font-size: 0.9em;
             color: #e2e8f0;
-            padding: 8px 0; /* Add padding to look like a clickable header */
-            border-top: 1px solid #4a5568; /* Separator from inputs above */
+            padding: 8px 0; 
+            border-top: 1px solid #4a5568; 
             margin-top: 10px;
         }
 
@@ -434,7 +436,6 @@
         }
 
         #onscreenKeyboardContainer.expanded {
-            /* Adjusted max-height to fit remaining inputs and OSK */
             max-height: 700px; 
             padding-top: 10px; 
         }
@@ -459,7 +460,7 @@
             border-radius: 8px;
             border: 1px solid #4a5568;
             font-size: 1.1em;
-            margin-bottom: 0; /* No margin as it's the last element in the collapsible container */
+            margin-bottom: 0; 
         }
 
         .key-row {
@@ -549,10 +550,8 @@
         .key-row .space { flex-grow: 8; background: #1a202c; }
         .key-row .space:hover { background: #4a5568; }
 
-        /* CAPS LOCK KEY WIDTH FIX */
         .key-row .caps-lock { flex-grow: 1.5; } 
 
-        /* Last Row Key Spacing */
         .key-row:last-child .key-btn.special:nth-child(1) { flex-grow: 1.25; } 
         .key-row:last-child .key-btn.special:nth-child(2) { flex-grow: 1.25; } 
         .key-row:last-child .key-btn.space { flex-grow: 6; } 
@@ -568,31 +567,26 @@
             background: #48bb78;
         }
         
-        /* Hide shift characters on non-shifted keys unless the keyboard is shifted */
         .key-btn .key-shift { display: none; }
         .keyboard-layout.shifted .key-btn .key-shift { display: block; }
-        /* --- END Keyboard Styles --- */
-
 
         @media (max-width: 768px) {
             .input-row,
             .input-row-three-col {
                 grid-template-columns: 1fr;
             }
-            /* Reset absolute positioning for size inputs on small screens */
             #sizeChooserWrapper input {
                 position: static;
-                height: auto; /* Revert explicit height for stacking */
+                height: auto; 
             }
             #sizeChooserWrapper {
-                height: auto; /* Allow height to collapse when inputs stack */
+                height: auto; 
             }
 
             .action-buttons {
                 flex-direction: column;
             }
 
-            /* Media queries for OSK */
             .key-row {
                 gap: 2px;
             }
@@ -604,6 +598,22 @@
             .key-btn.special {
                 line-height: 35px;
                 padding: 0 5px;
+            }
+            .header-button-row {
+                 flex-direction: column;
+            }
+            .load-font-btn, .copy-path-btn {
+                width: 100%;
+            }
+            
+            /* Mobile adjustment for input group */
+            .input-with-button-wrap {
+                flex-direction: row;
+                gap: 10px;
+            }
+            #fontSearch {
+                width: 100%;
+                flex-grow: 1;
             }
         }
     </style>
@@ -621,8 +631,10 @@
         <div class="input-section">
             <div class="input-group">
                 <label for="fontSearch">Select ESRI Font <span id="fontCount"></span></label>
-                <input type="text" id="fontSearch" placeholder="Search loaded fonts..." autocomplete="off">
-                <button class="clear-font-btn" id="clearFontBtn" onclick="clearFontSelection()" style="display: none;">Clear</button>
+                <div class="input-with-button-wrap">
+                    <input type="text" id="fontSearch" placeholder="Search loaded fonts..." autocomplete="off">
+                    <button class="clear-font-btn" id="clearFontBtn" onclick="clearFontSelection()" style="display: none;">Clear</button>
+                </div>
                 <div id="fontDropdown" class="font-dropdown" style="display: none;"></div>
                 <input type="hidden" id="fontSelect">
             </div>
@@ -777,40 +789,41 @@
         const fontFileInput = document.getElementById('fontFileInput');
         const colorInput = document.getElementById('colorInput'); 
 
-        // Function to rebuild the dynamic content inside the loading banner
-        function reconstructLoadingBanner(successCount = null) {
+        /**
+         * Rebuilds the dynamic content inside the loading banner (buttons only, slim).
+         * @param {number} totalFontCount - The current total number of successfully loaded fonts.
+         */
+        function reconstructLoadingBanner(totalFontCount = 0) {
             const loadingBanner = document.getElementById('loadingBanner');
             
-            let successMessage = '';
-            if (successCount !== null) {
-                successMessage = `<div style="color: #48bb78; margin-top: 15px; font-weight: 600;">✓ Loaded ${successCount} fonts successfully!</div>`;
-            }
+            // The success status message
+            const statusMessage = totalFontCount > 0 
+                ? `✓ ${totalFontCount} ArcGIS Fonts loaded and ready to use.`
+                : '';
 
+            // The main HTML structure is slimmed down to buttons + status bar
             loadingBanner.innerHTML = `
-                <button class="load-font-btn" onclick="loadArcGISFonts()">Load ArcGIS Fonts</button>
-                <div class="font-instructions">
-                    Click button above, then navigate to:
+                <div class="header-button-row">
+                    <button class="load-font-btn" onclick="loadArcGISFonts()">Load ArcGIS Fonts</button>
+                    <button class="copy-path-btn" onclick="copyFontPath()">
+                        <span class="copy-path-btn-text">Copy ArcGIS Font path if needed</span>
+                    </button>
                 </div>
-                <div class="font-path-container">
-                    <div class="font-path">C:\\Program Files\\ArcGIS\\Pro\\Resources\\Fonts</div>
-                    <button class="copy-path-btn" onclick="copyFontPath()">Copy</button>
-                </div>
-                <div class="font-instructions" style="margin-top: 8px;">
-                    Select all font files (Ctrl+A) and click Open
-                </div>
-                ${successMessage}
+                <div id="loadStatus" class="load-status-bar">${statusMessage}</div>
             `;
         }
 
 
         function copyFontPath() {
             const path = 'C:\\Program Files\\ArcGIS\\Pro\\Resources\\Fonts';
-            const btn = event.target;
+            const btn = event.target.closest('.copy-path-btn');
 
             navigator.clipboard.writeText(path).then(() => {
-                const originalText = btn.textContent;
+                const span = btn.querySelector('.copy-path-btn-text');
+                const originalText = "Copy ArcGIS Font path if needed";
+                
                 // 1. Change text and color for success feedback
-                btn.textContent = 'Copied!';
+                span.textContent = 'Path Copied!';
                 btn.classList.add('copied');
                 
                 // 2. Start the glowing animation
@@ -820,9 +833,9 @@
 
                 setTimeout(() => {
                     // 3. Revert text and color after success feedback is complete
-                    btn.textContent = originalText;
+                    span.textContent = originalText;
                     btn.classList.remove('copied');
-                }, 2000); // Keep text/color for 2s
+                }, 2000); 
 
                 setTimeout(() => {
                     // 4. Remove glowing class after animation finishes (0.8s)
@@ -832,12 +845,14 @@
             }).catch(err => {
                 // Handle clipboard failure gracefully
                 console.error('Could not copy to clipboard:', err);
-                const originalText = btn.textContent;
-                btn.textContent = 'Failed!';
+                const span = btn.querySelector('.copy-path-btn-text');
+                const originalText = "Copy ArcGIS Font path if needed";
+                
+                span.textContent = 'Failed!';
                 btn.style.backgroundColor = '#e53e3e';
                 setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.backgroundColor = '#48bb78';
+                    span.textContent = originalText;
+                    btn.style.backgroundColor = ''; // Revert to CSS default
                 }, 2000);
             });
         }
@@ -910,7 +925,6 @@
                 const pngInput = document.getElementById('sizeInput');
                 const sizeLabel = document.getElementById('sizeLabel');
 
-                // Toggle display of SVG and PNG options
                 if (currentFormat === 'png') {
                     pngInput.style.display = 'block';
                     svgInput.style.display = 'none';
@@ -927,7 +941,6 @@
         const decimalInput = document.getElementById('decimalInput');
         const hexInput = document.getElementById('hexInput');
 
-        // Function to update all input fields from a character or string
         const updateInputsFromKey = (char) => {
              if (char.toLowerCase() === 'space') {
                 keyInput.value = 'Space';
@@ -943,10 +956,8 @@
             if (val.toLowerCase() === 'space') {
                 code = 32;
             } else if (val.toUpperCase().startsWith('U+') && val.length > 2) {
-                // Handle U+XXXX format
                 code = parseInt(val.substring(2), 16);
             } else if (val.length > 0) {
-                // Handle single character
                 code = val.charCodeAt(0);
             }
             
@@ -990,7 +1001,6 @@
         });
 
 
-        // ON-SCREEN KEYBOARD LOGIC START
         const keyboard = document.getElementById('onscreenKeyboard');
         let isShifted = false;
 
@@ -1009,38 +1019,31 @@
                 }
 
                 if (charType === 'backspace') {
-                    updateInputsFromKey(''); // Clear the single character
+                    updateInputsFromKey('');
                 } else if (charType === 'Space') {
                     updateInputsFromKey('Space');
                 } else if (btn.dataset.main) {
-                    // Character keys (letters, numbers, symbols)
                     let char = isShifted ? (btn.dataset.shift || btn.dataset.main) : btn.dataset.main;
                     
-                    // If it's a letter, respect the shift key state for case
                     if (char.length === 1 && /[a-z]/i.test(char)) {
                         char = isShifted ? char.toUpperCase() : char.toLowerCase();
                     }
 
                     updateInputsFromKey(char);
 
-                    // Auto-off shift mode after a character is typed
                     if (isShifted && char.length === 1) {
                         isShifted = false;
                         keyboard.classList.remove('shifted');
                         document.querySelectorAll('.key-btn[data-char="Shift"]').forEach(s => s.classList.remove('active'));
                     }
                 }
-                // Ignore other special keys (Caps, Tab, Alt, Enter) for simplicity
             });
         }
-        // ON-SCREEN KEYBOARD LOGIC END
 
-        // COLLAPSIBLE LOGIC START (now for export options and OSK)
         function toggleOsk() {
             const container = document.getElementById('onscreenKeyboardContainer');
             container.classList.toggle('expanded');
         }
-        // COLLAPSIBLE LOGIC END
 
         function generatePreview() {
             const selectedFont = fontSelect.value;
@@ -1063,7 +1066,6 @@
             const character = String.fromCharCode(decimalCode);
             const previewBox = document.getElementById('previewBox');
             
-            // Apply selectedColor to the symbol-preview style
             previewBox.innerHTML = `
                 <div class="preview-content">
                     <div class="symbol-preview" style="font-family: '${currentFont}', sans-serif; color: ${selectedColor};">${character}</div>
@@ -1178,12 +1180,18 @@
             const files = event.target.files;
             
             if (!files || files.length === 0) {
-                reconstructLoadingBanner(null);
+                reconstructLoadingBanner(installedFonts.length);
                 return;
             }
 
             const loadingBanner = document.getElementById('loadingBanner');
-            loadingBanner.innerHTML = `Loading ${files.length} font files...`;
+            loadingBanner.innerHTML = `
+                <div class="header-button-row">
+                    <button class="load-font-btn">Loading ${files.length} files...</button>
+                    <button class="copy-path-btn" onclick="copyFontPath()"><span class="copy-path-btn-text">Copy ArcGIS Font path if needed</span></button>
+                </div>
+                <div id="loadStatus" class="load-status-bar">Please wait...</div>
+            `;
 
             let successCount = 0;
             const newFonts = [];
@@ -1193,7 +1201,6 @@
                     const arrayBuffer = await file.arrayBuffer();
                     const fontName = file.name.replace(/\.(ttf|otf)$/i, '');
                     
-                    // Skip if font is already loaded/scanned
                     if (installedFonts.includes(fontName) && loadedFontFiles[fontName]) {
                         successCount++;
                         continue;
@@ -1216,41 +1223,32 @@
                 }
             }
 
-            // Update the master list
             installedFonts = [...new Set([...installedFonts, ...newFonts])].sort();
             
-            // Reconstruct the banner with the success message
-            reconstructLoadingBanner(successCount);
+            reconstructLoadingBanner(installedFonts.length); 
             
             document.getElementById('fontCount').textContent = `(${installedFonts.length} available)`;
             
-            // Repopulate the font dropdown to show the newly loaded fonts
             populateFontDropdown('');
         }
 
         function loadArcGISFonts() {
-            // Trigger the hidden file input
             fontFileInput.click();
         }
 
         window.addEventListener('load', function() {
-            // 1. Set up the initial loading banner structure
-            reconstructLoadingBanner(null);
+            reconstructLoadingBanner(0);
 
-            // 2. Attach the listener to the file input (it is outside the banner now)
             fontFileInput.addEventListener('change', loadFontFiles);
 
-            // 3. Initialize the font list and count to 0
             installedFonts = []; 
             document.getElementById('fontCount').textContent = `(0 available)`;
 
-            // 4. Attach toggle event listener to OSK label (now the main input details label)
             const oskLabel = document.getElementById('oskLabel');
             if (oskLabel) {
                 oskLabel.addEventListener('click', toggleOsk);
             }
             
-            // 5. Attach event listener for live color update
             colorInput.addEventListener('input', function() {
                 const symbolPreviewElement = document.querySelector('#previewBox .symbol-preview');
                 if (symbolPreviewElement) {
