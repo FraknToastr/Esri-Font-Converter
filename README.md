@@ -6,5 +6,7 @@ Esri-Font-Catalog.py creates a manual of all Esri fonts, showing sybol, key, dec
 
 Esri Font Converted lets the user choose an Esri font, enter a chacater by key, decimal, or hex value and convert that symbol to a PNG or SVG file.<br>
 
-https://claude.ai/chat/0f8f3ded-a19f-4054-95d9-3f0eb3b00bf2
+https://claude.ai/chat/0f8f3ded-a19f-4054-95d9-3f0eb3b00bf2<br>
+
+https://gemini.google.com/app/31ff9942fb866d05
 
