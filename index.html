@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESRI Font Symbol Exporter</title>
+    <title>ESRI Font Symbol Exporter v3</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/opentype.js/1.3.4/opentype.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -33,10 +34,9 @@
             font-size: 2em;
         }
 
-        /* --- SLIM HEADER STYLES --- */
         .loading-banner {
             background: #4a5568;
-            padding: 10px 20px; /* Reduced vertical padding */
+            padding: 10px 20px;
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
@@ -48,14 +48,14 @@
         
         .header-button-row {
             display: flex;
-            gap: 15px; /* Space between the two buttons */
+            gap: 15px;
             align-items: center;
             justify-content: center;
             width: 100%;
         }
 
         .load-font-btn {
-            padding: 8px 18px; /* Slimmer button */
+            padding: 8px 18px;
             font-size: 0.9em;
             background: #48bb78;
             color: white;
@@ -63,7 +63,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            margin-bottom: 0; /* Remove previous margin */
+            margin-bottom: 0;
             transition: all 0.3s;
         }
 
@@ -71,12 +71,11 @@
             background: #38a169;
         }
 
-        /* Re-purpose copy button style for the new layout */
         .copy-path-btn {
             background: #48bb78;
             color: white;
             border: none;
-            padding: 8px 18px !important; /* Matches Load button padding */
+            padding: 8px 18px !important;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.9em;
@@ -94,12 +93,10 @@
             margin-top: 5px; 
             font-size: 0.85em;
             font-weight: 600;
-            color: #48bb78; /* Success color */
+            color: #48bb78;
             min-height: 1.2em;
         }
-        /* --- END SLIM HEADER STYLES --- */
 
-        /* Remaining styles are inherited from previous versions */
         .copy-path-btn-text {
             white-space: nowrap; 
             font-size: 1em;
@@ -114,7 +111,6 @@
             background: #2f855a;
         }
 
-        /* Keyframes for the glowing effect */
         @keyframes copy-glow {
             0% {
                 box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.8);
@@ -127,7 +123,6 @@
             }
         }
 
-        /* Apply animation on successful copy (glow and fade) */
         .copy-path-btn.glowing {
             animation: copy-glow 0.8s ease-out forwards;
         }
@@ -144,7 +139,6 @@
             position: relative;
         }
         
-        /* NEW: Flex container for Input and Button */
         .input-with-button-wrap {
             display: flex;
             align-items: center; 
@@ -211,23 +205,18 @@
             border-radius: 6px;
         }
 
-        #colorInput::-moz-color-swatch-wrapper {
-            padding: 0;
-        }
-        
         #colorInput::-moz-color-swatch {
             border: none;
             border-radius: 6px;
         }
         
         #fontSearch {
-            padding-right: 15px; /* Restored normal padding */
-            flex-grow: 1; /* Input takes up available space */
-            width: auto; /* Override previous 100% width */
+            padding-right: 15px;
+            flex-grow: 1;
+            width: auto;
         }
 
         .clear-font-btn {
-            /* Positioning logic removed for flexbox alignment */
             background: #667eea;
             color: white;
             border: none;
@@ -237,8 +226,8 @@
             font-size: 0.85em;
             font-weight: 600;
             z-index: 100;
-            flex-shrink: 0; /* Prevents button from shrinking */
-            height: 44px; /* Matches input height for perfect alignment */
+            flex-shrink: 0;
+            height: 44px;
         }
 
         .clear-font-btn:hover {
@@ -413,7 +402,6 @@
             font-style: italic;
         }
 
-        /* --- Collapsible Styles --- */
         #oskLabel {
             cursor: pointer;
             display: flex;
@@ -448,9 +436,7 @@
         #onscreenKeyboardContainer.expanded #toggleIcon {
             transform: rotate(-180deg);
         }
-        /* --- END Collapsible Styles --- */
 
-        /* --- Keyboard Layout Styles --- */
         .keyboard-layout {
             display: flex;
             flex-wrap: wrap;
@@ -491,13 +477,11 @@
             background: #667eea;
         }
 
-        /* Key content for default/shifted states */
         .key-btn .key-main { display: block; line-height: 1; padding-top: 15px; }
         .key-btn .key-shift { display: none; }
         .keyboard-layout.shifted .key-btn .key-main { display: none; }
         .keyboard-layout.shifted .key-btn .key-shift { display: block; line-height: 1; padding-top: 15px; }
 
-        /* Small character keys (e.g., number row secondary symbols) */
         .key-btn[data-shift]:not([data-char]) .key-main,
         .key-btn[data-shift]:not([data-char]) .key-shift {
             font-size: 0.7em;
@@ -542,16 +526,13 @@
             color: white;
         }
         
-        /* Specific key widths */
         .key-row .backspace { flex-grow: 1.5; padding: 0 !important; }
         .key-row .tab { flex-grow: 1.25; }
         .key-row .enter { flex-grow: 2; }
         .key-row .shift-left, .key-row .shift-right { flex-grow: 1.7; }
         .key-row .space { flex-grow: 8; background: #1a202c; }
         .key-row .space:hover { background: #4a5568; }
-
         .key-row .caps-lock { flex-grow: 1.5; } 
-
         .key-row:last-child .key-btn.special:nth-child(1) { flex-grow: 1.25; } 
         .key-row:last-child .key-btn.special:nth-child(2) { flex-grow: 1.25; } 
         .key-row:last-child .key-btn.space { flex-grow: 6; } 
@@ -582,11 +563,9 @@
             #sizeChooserWrapper {
                 height: auto; 
             }
-
             .action-buttons {
                 flex-direction: column;
             }
-
             .key-row {
                 gap: 2px;
             }
@@ -605,8 +584,6 @@
             .load-font-btn, .copy-path-btn {
                 width: 100%;
             }
-            
-            /* Mobile adjustment for input group */
             .input-with-button-wrap {
                 flex-direction: row;
                 gap: 10px;
@@ -620,13 +597,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>ESRI Font Symbol Exporter</h1>
+        <h1>ESRI Font Symbol Exporter v3</h1>
 
-        <div id="loadingBanner" class="loading-banner">
-            </div>
+        <div id="loadingBanner" class="loading-banner"></div>
         
         <input type="file" id="fontFileInput" accept=".ttf,.otf" multiple style="display: none;">
-
 
         <div class="input-section">
             <div class="input-group">
@@ -681,7 +656,7 @@
                             
                             <input type="number" id="sizeInput" value="512" min="64" max="2048" step="64" style="display: none;">
                         </div>
-                        </div>
+                    </div>
                     <div style="margin-top: 20px;">
                         <label>On-Screen Keyboard</label>
                         <div id="onscreenKeyboard" class="keyboard-layout">
@@ -759,13 +734,13 @@
                             </div>
                         </div>
                     </div>
-                    </div>
+                </div>
             </div>
             <div class="action-buttons">
                 <button class="btn-generate" onclick="generatePreview()">Generate Preview</button>
                 <button class="btn-download" id="downloadBtn" disabled onclick="downloadSymbol()">Download Symbol</button>
             </div>
-            </div>
+        </div>
 
         <div class="preview-section">
             <div class="preview-title">Preview</div>
@@ -778,6 +753,7 @@
     <script>
         let installedFonts = [];
         let loadedFontFiles = {};
+        let loadedOpentypeFonts = {};
         let currentFormat = 'svg';
         let currentCharCode = null;
         let currentFont = null;
@@ -789,19 +765,13 @@
         const fontFileInput = document.getElementById('fontFileInput');
         const colorInput = document.getElementById('colorInput'); 
 
-        /**
-         * Rebuilds the dynamic content inside the loading banner (buttons only, slim).
-         * @param {number} totalFontCount - The current total number of successfully loaded fonts.
-         */
         function reconstructLoadingBanner(totalFontCount = 0) {
             const loadingBanner = document.getElementById('loadingBanner');
             
-            // The success status message
             const statusMessage = totalFontCount > 0 
                 ? `✓ ${totalFontCount} ArcGIS Fonts loaded and ready to use.`
                 : '';
 
-            // The main HTML structure is slimmed down to buttons + status bar
             loadingBanner.innerHTML = `
                 <div class="header-button-row">
                     <button class="load-font-btn" onclick="loadArcGISFonts()">Load ArcGIS Fonts</button>
@@ -813,7 +783,6 @@
             `;
         }
 
-
         function copyFontPath() {
             const path = 'C:\\Program Files\\ArcGIS\\Pro\\Resources\\Fonts';
             const btn = event.target.closest('.copy-path-btn');
@@ -822,28 +791,23 @@
                 const span = btn.querySelector('.copy-path-btn-text');
                 const originalText = "Copy ArcGIS Font path if needed";
                 
-                // 1. Change text and color for success feedback
                 span.textContent = 'Path Copied!';
                 btn.classList.add('copied');
                 
-                // 2. Start the glowing animation
                 btn.classList.remove('glowing');
-                void btn.offsetWidth; // Trigger reflow
+                void btn.offsetWidth;
                 btn.classList.add('glowing');
 
                 setTimeout(() => {
-                    // 3. Revert text and color after success feedback is complete
                     span.textContent = originalText;
                     btn.classList.remove('copied');
                 }, 2000); 
 
                 setTimeout(() => {
-                    // 4. Remove glowing class after animation finishes (0.8s)
                     btn.classList.remove('glowing'); 
                 }, 800);
 
             }).catch(err => {
-                // Handle clipboard failure gracefully
                 console.error('Could not copy to clipboard:', err);
                 const span = btn.querySelector('.copy-path-btn-text');
                 const originalText = "Copy ArcGIS Font path if needed";
@@ -852,11 +816,10 @@
                 btn.style.backgroundColor = '#e53e3e';
                 setTimeout(() => {
                     span.textContent = originalText;
-                    btn.style.backgroundColor = ''; // Revert to CSS default
+                    btn.style.backgroundColor = '';
                 }, 2000);
             });
         }
-
 
         function populateFontDropdown(filterText = '') {
             const filtered = installedFonts.filter(font => 
@@ -1000,7 +963,6 @@
             }
         });
 
-
         const keyboard = document.getElementById('onscreenKeyboard');
         let isShifted = false;
 
@@ -1096,44 +1058,72 @@
             }
         }
 
-        function downloadSVG(character, filename) {
+        async function downloadSVG(character, filename) {
             const size = parseInt(document.getElementById('svgSizeInput').value) || 512; 
             const symbolColor = colorInput.value; 
             
-            if (!loadedFontFiles[currentFont]) {
+            if (!loadedOpentypeFonts[currentFont]) {
                 alert('Error: Font data not found. Please reload the font.');
                 return;
             }
             
-            const fontData = loadedFontFiles[currentFont].data;
-            const uint8Array = new Uint8Array(fontData);
-            let binaryString = '';
-            for (let i = 0; i < uint8Array.length; i++) {
-                binaryString += String.fromCharCode(uint8Array[i]);
+            const font = loadedOpentypeFonts[currentFont];
+            
+            const glyph = font.charToGlyph(character);
+            
+            if (!glyph || glyph.index === 0) {
+                alert('Character not found in font. Glyph index: ' + glyph.index);
+                return;
             }
-            const base64Font = btoa(binaryString);
+            
+            console.log('Font:', currentFont);
+            console.log('Character:', character, 'Code:', character.charCodeAt(0));
+            console.log('Glyph index:', glyph.index);
+            console.log('Glyph name:', glyph.name);
+            
+            const fontSize = size * 0.75;
+            const scale = fontSize / font.unitsPerEm;
+            
+            // Get path at origin
+            const path = glyph.getPath(0, 0, fontSize);
+            const pathData = path.toPathData(2);
+            
+            console.log('Path data:', pathData.substring(0, 100) + '...');
+            
+            if (!pathData || pathData === '' || pathData === 'M0,0') {
+                alert('No path data found for this glyph. The character may not exist in this font.');
+                return;
+            }
+            
+            const bounds = glyph.getBoundingBox();
+            console.log('Bounds:', bounds);
+            
+            const glyphWidth = (bounds.x2 - bounds.x1) * scale;
+            const glyphHeight = (bounds.y2 - bounds.y1) * scale;
+            
+            // Center the glyph properly
+            // Move right to center horizontally, accounting for left bearing
+            const x = (size - glyphWidth) / 2 - (bounds.x1 * scale);
+            // For Y: flip the coordinate system and center vertically
+            // The glyph should be centered in the canvas
+            const y = (size / 2) - ((bounds.y2 + bounds.y1) / 2 * scale);
+            
+            console.log('Positioning - X:', x, 'Y:', y, 'Scale:', scale);
+            console.log('Glyph dimensions - Width:', glyphWidth, 'Height:', glyphHeight);
+            console.log('Bounds in pixels - X1:', bounds.x1 * scale, 'Y1:', bounds.y1 * scale, 'X2:', bounds.x2 * scale, 'Y2:', bounds.y2 * scale);
             
             const svg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style type="text/css">
-      @font-face {
-        font-family: "EmbeddedESRI";
-        src: url("data:font/truetype;base64,${base64Font}") format("truetype");
-      }
-    </style>
-  </defs>
-  <rect width="${size}" height="${size}" fill="transparent"/>
-  <text x="50%" y="65%" 
-        font-family="EmbeddedESRI" 
-        font-size="${size * 0.75}" 
-        text-anchor="middle" 
-        dominant-baseline="middle"
-        fill="${symbolColor}">${character}</text> 
+<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg">
+  <!-- Font: ${currentFont} | Character: ${character} (${character.charCodeAt(0)}) | Glyph: ${glyph.index} -->
+  <g transform="translate(${x.toFixed(2)}, ${y.toFixed(2)}) scale(1, -1)">
+    <path d="${pathData}" fill="${symbolColor}"/>
+  </g>
 </svg>`;
 
             const blob = new Blob([svg], { type: 'image/svg+xml' });
             downloadBlob(blob, filename + '.svg');
+            
+            console.log('SVG generated successfully. Check browser console for details.');
         }
 
         async function downloadPNG(character, filename) {
@@ -1206,6 +1196,8 @@
                         continue;
                     }
 
+                    const opentypeFont = opentype.parse(arrayBuffer);
+                    
                     const fontFace = new FontFace(fontName, arrayBuffer);
                     await fontFace.load();
                     document.fonts.add(fontFace);
@@ -1215,6 +1207,8 @@
                         fileName: file.name,
                         fontFace: fontFace
                     };
+                    
+                    loadedOpentypeFonts[fontName] = opentypeFont;
                     
                     newFonts.push(fontName);
                     successCount++;
