@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESRI Font Symbol Exporter v6.3 – Dark-Theme Pro Edition</title>
+
+<details>
+<summary>⚙️ CSS (click to expand)</summary>
+<style>
+/* ---------- GLOBAL ---------- */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#1a202c;min-height:100vh;padding:20px;color:#e2e8f0}
+.container{max-width:1200px;margin:0 auto;background:#2d3748;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,.5);padding:40px}
+h1{color:#e2e8f0;margin-bottom:30px;font-size:2em;text-align:center}
+
+/* ---------- INPUTS & BUTTONS ---------- */
+input,select,button{font-family:inherit}
+button{cursor:pointer;transition:.2s}
+button:disabled{opacity:.6;cursor:not-allowed}
+
+/* ---------- FORM LAYOUT ---------- */
+.input-section{background:#1a202c;padding:25px;border-radius:12px;margin-bottom:30px}
+.input-row{display:flex;gap:10px;align-items:center}
+.input-row label{font-weight:600}
+.input-row input{flex:1;padding:10px 14px;border:2px solid #4a5568;background:#2d3748;color:#e2e8f0;border-radius:8px;font-size:1em}
+.btn-generate{padding:10px 18px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;border:none;border-radius:8px;font-weight:600}
+.btn-generate:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(102,126,234,.3)}
+
+/* ---------- PREVIEW ---------- */
+.preview-section{margin-top:30px}
+.preview-split{display:grid;grid-template-columns:2fr 3fr;gap:16px}
+.card{background:#1a202c;border:2px dashed #4a5568;border-radius:12px;min-height:320px;padding:16px;display:flex;align-items:center;justify-content:center;position:relative}
+#previewCanvasHost{width:100%;height:288px;position:relative;border-radius:10px}
+
+/* ---------- CONTROL BAR BELOW PREVIEW ---------- */
+.control-bar{display:flex;justify-content:center;gap:15px;margin-top:12px}
+.control-btn{padding:10px 22px;border:1px solid #4a5568;background:#1a202c;color:#e2e8f0;border-radius:10px;font-weight:600;display:flex;align-items:center;gap:6px;font-size:.95em}
+.control-btn:hover{background:#2d3748;border-color:#667eea;color:#fff}
+
+/* ---------- DARK THEME OSK ---------- */
+.keyboard-layout{margin-top:10px;display:flex;flex-direction:column;gap:4px}
+.key-row{display:flex;gap:4px;justify-content:center}
+.key-btn{flex:0 0 36px;height:36px;border:1px solid #4a5568;background:#1a202c;color:#e2e8f0;border-radius:6px;font-size:.9em;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -2px 0 rgba(255,255,255,.05)}
+.key-btn.special{flex:0 0 auto;padding:0 10px}
+.key-btn.space{flex:1}
+.key-btn:hover{background:#2d3748;border-color:#667eea}
+.key-btn.active{background:#3b4a7a}
+
+/* ---------- CROSSHAIR ---------- */
+@keyframes pulse-crosshair{0%{opacity:.0}20%{opacity:.9}100%{opacity:.55}}
+.pulse{animation:pulse-crosshair 1s ease-out 1}
+
+/* ---------- RESPONSIVE ---------- */
+@media(max-width:1050px){
+  .preview-split{grid-template-columns:1fr}
+  .input-row{flex-direction:column;align-items:stretch}
+}
+</style>
+</details>
+</head>
+
+<body>
+<div class="container">
+<h1>ESRI Font Symbol Exporter v6.3</h1>
+
+<!-- INPUTS -->
+<div class="input-section">
+  <div class="input-row">
+    <label for="keyInput">Key Character</label>
+    <input id="keyInput" type="text" placeholder="e.g. A" maxlength="10">
+    <button id="generateBtn" class="btn-generate">Generate Preview</button>
+  </div>
+  <div class="input-row">
+    <label for="decimalInput">Decimal</label>
+    <input id="decimalInput" type="number" placeholder="65" min="0" max="65535">
+    <label for="hexInput">Hex</label>
+    <input id="hexInput" type="text" placeholder="41" maxlength="6">
+  </div>
+
+  <!-- On-Screen Keyboard -->
+  <div class="keyboard-layout" id="onscreenKeyboard">
+    <div class="key-row">
+      <button class="key-btn" data-main="1" data-shift="!">1</button>
+      <button class="key-btn" data-main="2" data-shift="@">2</button>
+      <button class="key-btn" data-main="3" data-shift="#">3</button>
+      <button class="key-btn" data-main="4" data-shift="$">4</button>
+      <button class="key-btn" data-main="5" data-shift="%">5</button>
+      <button class="key-btn" data-main="6" data-shift="^">6</button>
+      <button class="key-btn" data-main="7" data-shift="&">7</button>
+      <button class="key-btn" data-main="8" data-shift="*">8</button>
+      <button class="key-btn" data-main="9" data-shift="(">9</button>
+      <button class="key-btn" data-main="0" data-shift=")">0</button>
+      <button class="key-btn special" data-char="backspace">⌫</button>
+    </div>
+    <div class="key-row">
+      <button class="key-btn special" data-char="Shift">⇧ Shift</button>
+      <button class="key-btn" data-main="q" data-shift="Q">q</button>
+      <button class="key-btn" data-main="w" data-shift="W">w</button>
+      <button class="key-btn" data-main="e" data-shift="E">e</button>
+      <button class="key-btn" data-main="r" data-shift="R">r</button>
+      <button class="key-btn" data-main="t" data-shift="T">t</button>
+      <button class="key-btn" data-main="y" data-shift="Y">y</button>
+      <button class="key-btn" data-main="u" data-shift="U">u</button>
+      <button class="key-btn" data-main="i" data-shift="I">i</button>
+      <button class="key-btn" data-main="o" data-shift="O">o</button>
+      <button class="key-btn" data-main="p" data-shift="P">p</button>
+      <button class="key-btn special" data-char="enter">⏎</button>
+    </div>
+    <div class="key-row">
+      <button class="key-btn" data-main="a" data-shift="A">a</button>
+      <button class="key-btn" data-main="s" data-shift="S">s</button>
+      <button class="key-btn" data-main="d" data-shift="D">d</button>
+      <button class="key-btn" data-main="f" data-shift="F">f</button>
+      <button class="key-btn" data-main="g" data-shift="G">g</button>
+      <button class="key-btn" data-main="h" data-shift="H">h</button>
+      <button class="key-btn" data-main="j" data-shift="J">j</button>
+      <button class="key-btn" data-main="k" data-shift="K">k</button>
+      <button class="key-btn" data-main="l" data-shift="L">l</button>
+    </div>
+    <div class="key-row">
+      <button class="key-btn" data-main="z" data-shift="Z">z</button>
+      <button class="key-btn" data-main="x" data-shift="X">x</button>
+      <button class="key-btn" data-main="c" data-shift="C">c</button>
+      <button class="key-btn" data-main="v" data-shift="V">v</button>
+      <button class="key-btn" data-main="b" data-shift="B">b</button>
+      <button class="key-btn" data-main="n" data-shift="N">n</button>
+      <button class="key-btn" data-main="m" data-shift="M">m</button>
+      <button class="key-btn space" data-char="Space">Space</button>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW -->
+<div class="preview-section">
+  <div class="card">
+    <div id="previewCanvasHost"></div>
+  </div>
+
+  <!-- Control bar under preview -->
+  <div class="control-bar">
+    <button id="crosshairToggle" class="control-btn">🎯 Crosshair</button>
+    <button id="crosshairLayer" class="control-btn">⬆️/⬇️ Layer</button>
+    <button id="downloadBtn" class="control-btn">💾 Download Symbol</button>
+  </div>
+</div>
+</div>
+
+<details>
+<summary>⚙️ JavaScript (click to expand)</summary>
+<script>
+const keyInput=document.getElementById('keyInput'),
+decimalInput=document.getElementById('decimalInput'),
+hexInput=document.getElementById('hexInput'),
+keyboard=document.getElementById('onscreenKeyboard'),
+generateBtn=document.getElementById('generateBtn'),
+previewHost=document.getElementById('previewCanvasHost'),
+crosshairToggle=document.getElementById('crosshairToggle'),
+crosshairLayer=document.getElementById('crosshairLayer'),
+downloadBtn=document.getElementById('downloadBtn');
+
+let currentCharCode=null,crosshairOn=false,crosshairAbove=false,isShifted=false;
+
+function updateInputsFromKey(char){
+ if(!char){keyInput.value='';decimalInput.value='';hexInput.value='';renderPreview();return;}
+ keyInput.value=char;
+ const code=char.charCodeAt(0);
+ decimalInput.value=code;
+ hexInput.value=code.toString(16).toUpperCase();
+ renderPreview();
+}
+
+keyboard.addEventListener('click',e=>{
+ const btn=e.target.closest('.key-btn');if(!btn)return;
+ const ch=btn.dataset.char,main=btn.dataset.main,sh=btn.dataset.shift;
+ if(ch==='backspace'){updateInputsFromKey('');return;}
+ if(ch==='Space'){updateInputsFromKey(' ');return;}
+ if(ch==='Shift'){isShifted=!isShifted;btn.classList.toggle('active',isShifted);return;}
+ if(main){updateInputsFromKey(isShifted?(sh||main):main);isShifted=false;keyboard.querySelectorAll('.key-btn[data-char="Shift"]').forEach(b=>b.classList.remove('active'));}
+});
+
+generateBtn.addEventListener('click',()=>{
+ const val=keyInput.value.trim();
+ if(!val){alert('Enter a character');return;}
+ currentCharCode=val.charCodeAt(0);
+ renderPreview();
+});
+
+function renderPreview(){
+ previewHost.innerHTML='';
+ if(!currentCharCode)return;
+ const w=520,h=288,cx=w/2,cy=h/2;
+ const bg=`<rect x="${cx-60}" y="${cy-60}" width="120" height="120" rx="12" fill="#fff"/>`;
+ const sym=`<text x="${cx}" y="${cy}" fill="#000" font-size="120" text-anchor="middle" dominant-baseline="central">${String.fromCharCode(currentCharCode)}</text>`;
+ const ch=crosshairOn?buildCrosshair(w,h):'';
+ const under=crosshairAbove?'':ch,over=crosshairAbove?ch:'';
+ const svg=`<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">${under}${bg}${sym}${over}</svg>`;
+ previewHost.innerHTML=svg;
+}
+function buildCrosshair(w,h){
+ const c='#a0aec0',cx=w/2,cy=h/2;
+ return `<g class="pulse"><line x1="0" y1="${cy}" x2="${w}" y2="${cy}" stroke="${c}" stroke-width="1" stroke-dasharray="4 4"/><line x1="${cx}" y1="0" x2="${cx}" y2="${h}" stroke="${c}" stroke-width="1" stroke-dasharray="4 4"/></g>`;
+}
+crosshairToggle.addEventListener('click',()=>{crosshairOn=!crosshairOn;renderPreview();});
+crosshairLayer.addEventListener('click',()=>{crosshairAbove=!crosshairAbove;renderPreview();});
+
+downloadBtn.addEventListener('click',()=>{
+ if(!currentCharCode){alert('Generate a symbol first');return;}
+ const svg=previewHost.innerHTML;
+ const blob=new Blob([svg],{type:'image/svg+xml'});
+ const a=document.createElement('a');
+ a.href=URL.createObjectURL(blob);
+ a.download='symbol_'+currentCharCode+'.svg';
+ document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);
+});
+</script>
+</details>
+
+</body>
+</html>
