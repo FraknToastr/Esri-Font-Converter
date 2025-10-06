@@ -8,5 +8,7 @@ Esri Font Converted lets the user choose an Esri font, enter a chacater by key, 
 
 https://claude.ai/chat/0f8f3ded-a19f-4054-95d9-3f0eb3b00bf2<br>
 
-https://gemini.google.com/app/31ff9942fb866d05
+https://gemini.google.com/app/31ff9942fb866d05<br>
+
+https://claude.ai/chat/62f34e7c-25ce-4027-b628-43798bccfa31 - Works!
 
